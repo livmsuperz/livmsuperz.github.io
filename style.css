@@ -18,7 +18,7 @@ li {
 }
 
 li {
-    display: block;
+    display: flow-root;
     color: rgb(22, 8, 12);
     text-align: center;
     padding: 14px 18px;
@@ -26,5 +26,5 @@ li {
 
 
 li a:hover {
-    background-color: #111;
+    background-color: #1a0725;
 }
