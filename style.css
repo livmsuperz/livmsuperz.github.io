@@ -3,10 +3,7 @@ body{
     color: rgb(85, 25, 104);
 }
 h1 {
-    font-size: 2em;
+    font-size: 8em;
     text-align: center;
-    background-image: url(pinkstarbanner.gif);
-    background-repeat: repeat;
-    background-position: center;
-    background-size: cover;
+    
 }
