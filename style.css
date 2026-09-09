@@ -12,19 +12,3 @@ ul{
     background-position: center;
     background-size: cover;
 }
-
-li {
-    float: inline-start;
-}
-
-li {
-    display: flow-root;
-    color: rgb(22, 8, 12);
-    text-align: center;
-    padding: 14px 18px;
-}
-
-
-li a:hover {
-    background-color: #1a0725;
-}
