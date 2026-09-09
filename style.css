@@ -9,6 +9,6 @@ body{
     height: 100vh;
     background-image: url(pinkstarbanner.gif);
     background-size: cover;
-    color: darkslateblue;
+    color: rgb(62, 30, 94);
     font-size: 2em;
 }
