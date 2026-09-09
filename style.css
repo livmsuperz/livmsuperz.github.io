@@ -1,3 +1,6 @@
+body{
+    background-image: url(pinkstarbanner.gif);
+}
 ul{
     list-style-type: none;
     margin: 0;
