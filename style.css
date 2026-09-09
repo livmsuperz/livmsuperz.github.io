@@ -1,3 +1,11 @@
 body{
-    
+    background-color: rgb(69, 33, 102);
+    color: white;
+}
+h1 {
+    font-size: 8em;
+    text-align: center;
+    background-image: url(pinkstarbanner.gif);
+    background-repeat: repeat;
+    background-position: center;
 }
