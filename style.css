@@ -8,4 +8,5 @@ h1 {
     background-image: url(pinkstarbanner.gif);
     background-repeat: repeat;
     background-position: center;
+    background-size: cover;
 }
