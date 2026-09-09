@@ -15,10 +15,10 @@ li {
 
 li {
     display: block;
-    color: lavenderblush;
+    color: rgb(248, 244, 245);
     text-align: center;
     padding: 10px 20px;
-    text-decoration: none;
+    -moz-text-decoration-style: wavy;
 }
 
 
