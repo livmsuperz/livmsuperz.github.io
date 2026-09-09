@@ -4,6 +4,9 @@ ul{
     padding: 0;
     overflow: hidden;
     background-color: rgb(80, 30, 119);
+    background-image: url(pinkstarbanner.gif);
+    background-position: center;
+    background-size: cover;
 }
 
 li {
