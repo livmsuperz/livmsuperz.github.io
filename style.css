@@ -8,6 +8,7 @@ ul{
     overflow: hidden;
     background-color: rgb(234, 227, 240);
     background-image: url(pinkstarbanner.gif);
+    background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
 }
