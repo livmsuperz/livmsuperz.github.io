@@ -4,3 +4,11 @@ body{
     background-repeat: no-repeat;
     background-position: center;
 }
+ul{
+    color: lavenderblush;
+}
+h1{
+    color: aliceblue;
+    text-align: left;
+    padding: 12px 14px;
+}
