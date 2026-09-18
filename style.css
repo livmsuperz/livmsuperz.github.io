@@ -7,29 +7,29 @@
 ul{
     color: rgb(243, 235, 237);
 }
-         h1{
+     h1{
      color: rgb(220, 232, 241);
      text-align: end;
      padding: 14px 16px;
      text-decoration: dotted;
      
-         }
-    h2{
+    }
+         h2{
      color: rgb(232, 236, 239);
      text-align: center;
      padding: 14px 16px;
      text-decoration: dotted;
      
-    }
-    h3{
+         }
+             h3{
         color: aliceblue;
         text-align: center;
         padding: 14px 16px;
         text-decoration: dotted;
-    }
-    h4{
+             }
+                 h4{
     color: rgb(246, 248, 250);
     text-align: center;
     padding: 14px 16px;
     text-decoration: dotted;
-    }
+                 }
