@@ -45,21 +45,21 @@
    height: 500px;
 
    background-color: rgb(153, 50, 204, 0.5);
-   border: 2px solid white;
+   border: 2px solid rgb(5, 5, 5);
    border-radius: 10px;
 
    padding: 20px;
 
 }  
 .menu h2{
-   color: lavenderblush;
+   color: rgb(248, 243, 245);
    text-align: center;
    margin-bottom: 20px;
 }                  
 .menu a{
    display: block;
 
-   color: rgb(204, 176, 222);
+   color: rgb(252, 251, 252);
    text-decoration: none;
    text-align: center;
 
