@@ -9,10 +9,7 @@
        background-repeat: no-repeat;
        background-position: center;
      }
-ul{
-    color: rgb(243, 235, 237);
-    text-align: left;
-}
+
      h1{
         display: block;
         color: rgb(220, 232, 241);
@@ -39,7 +36,7 @@ ul{
                     text-decoration: dotted;
                     } 
 
-ul{
+.ul{
    position: absolute;
    top: 25px;
    left: 25px;
