@@ -9,6 +9,7 @@ ul{
     text-align: left;
 }
      h1{
+         display: block;
          color: rgb(220, 232, 241);
          text-align: center;
          padding: 15px;
