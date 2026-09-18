@@ -36,7 +36,7 @@
                     text-decoration: dotted;
                     } 
 
-.ul{
+.menu{
    position: absolute;
    top: 25px;
    left: 25px;
@@ -51,12 +51,12 @@
    padding: 20px;
 
 }  
-.ul h2{
+.menu h2{
    color: lavenderblush;
    text-align: center;
    margin-bottom: 20px;
 }                  
-.ul a{
+.menu a{
    display: block;
 
    color: rgb(204, 176, 222);
