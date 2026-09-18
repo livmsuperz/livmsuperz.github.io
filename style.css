@@ -1,15 +1,16 @@
-body{
-    background-image: url(stars.jpeg);
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-}
+    body{
+       background-image: url(stars.jpeg);
+       background-size: cover;
+       background-repeat: no-repeat;
+       background-position: center;
+     }
 ul{
     color: rgb(243, 235, 237);
 }
-h1{
-    color: rgb(220, 232, 241);
-    text-align: left;
-    padding: 16px 18px;
-    text-decoration: dotted;
-}
+    h1{
+     color: rgb(220, 232, 241);
+     text-align: left;
+     padding: 16px 18px;
+     text-decoration: dotted;
+     
+     }
