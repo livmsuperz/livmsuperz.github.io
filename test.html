@@ -1,664 +1,131 @@
 <!DOCTYPE html>
-<html lang="en">
 
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>homepage/title>
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <script src="/script.js"></script>
-
-    <style>
-        :root {
-            --color-bg-main: #c394df;
-            --color-bg-secondary: #121212;
-            --color-card: #1e1e1e;
-            --color-accent: #d633fe;
-            --color-accent-hover: #33ff88;
-            --color-quizy-accent: #6f3e87;
-            --color-quizy-hover: #854da8;
-            --color-text-primary: #ffffff;
-            --color-text-secondary: #a0a0a0;
-            --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            --border-radius: 16px;
-            --border-color: #333;
-        }
-
-        * {
-            box-sizing: border-box;
-            font-family: var(--font-main);
-        }
-
-        body {
-            margin: 0;
-            background: linear-gradient(135deg, var(--color-bg-main), var(--color-bg-secondary));
-            color: var(--color-text-primary);
-            min-height: 100vh;
-            line-height: 1.6;
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 10px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: var(--color-bg-main);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #252525;
-            border-radius: 5px;
-            border: 2px solid var(--color-bg-main);
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--color-accent);
-        }
-
-        header {
-            background-color: rgba(18, 18, 18, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            color: white;
-            padding: 15px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border-color);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        #header-title {
-            font-weight: 700;
-            font-size: 22px;
-            cursor: pointer;
-            user-select: none;
-            color: #ffffff;
-            margin: 0;
-        }
-
-        #header-title span {
-            color: var(--color-accent);
-            text-shadow: 0 0 10px rgba(0, 255, 102, 0.4);
-        }
-
-        #header-right {
-            font-weight: 600;
-            font-size: 15px;
-            display: flex;
-            gap: 20px;
-            align-items: center;
-        }
-
-        #header-right a {
-            color: var(--color-text-secondary);
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        #header-right a:hover {
-            color: var(--color-accent);
-        }
-
-        #header-right a.search-btn,
-        .ide-btn,
-        .quizy-btn {
-            border: 1px solid var(--color-accent);
-            padding: 6px 14px;
-            border-radius: 20px;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: transparent;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        #header-right a.search-btn {
-            color: var(--color-accent);
-        }
-
-        #header-right a.search-btn:hover {
-            background: var(--color-accent);
-            color: #121212;
-            box-shadow: 0 0 15px rgba(0, 255, 102, 0.4);
-            cursor: pointer;
-        }
-
-        .ide-btn {
-            color: var(--color-accent);
-            border-color: var(--color-accent);
-        }
-
-        .ide-btn:hover {
-            background: var(--color-accent);
-            color: #121212;
-            box-shadow: 0 0 15px rgba(0, 255, 102, 0.4);
-        }
-
-        .quizy-btn {
-            color: #ffffff;
-            background: linear-gradient(135deg, var(--color-quizy-accent) 0%, var(--color-quizy-hover) 100%);
-            border: none;
-            box-shadow: 0 4px 10px rgba(82, 135, 62, 0.2);
-        }
-
-        .quizy-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 6px 15px rgba(82, 135, 62, 0.4);
-        }
-
-        #menu-toggle {
-            display: none;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 22px;
-            cursor: pointer;
-            padding: 5px;
-            z-index: 101;
-            transition: color 0.3s ease;
-        }
-
-        #menu-toggle:hover {
-            color: var(--color-accent);
-        }
-
-        @media (max-width: 768px) {
-            #menu-toggle {
-                display: block;
-            }
-
-            #header-right {
-                display: none;
-                flex-direction: column;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                right: 0;
-                background-color: rgba(18, 18, 18, 0.95);
-                backdrop-filter: blur(12px);
-                -webkit-backdrop-filter: blur(12px);
-                padding: 20px;
-                gap: 15px;
-                border-bottom: 1px solid var(--border-color);
-                align-items: stretch;
-                text-align: center;
-                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
-            }
-
-            #header-right.active {
-                display: flex;
-            }
-
-            #header-right a {
-                padding: 10px;
-                font-size: 16px;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            }
-
-            #header-right a:last-child {
-                border-bottom: none;
-            }
-
-            #header-right a.search-btn span {
-                display: inline;
-            }
-
-            #header-right a.search-btn {
-                padding: 10px 14px;
-                justify-content: center;
-            }
-        }
-
-        main {
-            padding: 40px 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        main h1 {
-            font-size: 2.8rem;
-            font-weight: 800;
-            margin-bottom: 12px;
-            color: var(--color-accent);
-        }
-
-        main p {
-            font-size: 1.15rem;
-            color: var(--color-text-secondary);
-            margin-bottom: 40px;
-            max-width: 750px;
-        }
-
-        #cards {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 25px;
-        }
-
-        .card {
-            background: var(--color-card);
-            border: 1px solid var(--border-color);
-            border-radius: var(--border-radius);
-            padding: 35px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            overflow: hidden;
-            grid-column: span 1;
-        }
-
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            border-radius: var(--border-radius);
-            border: 2px solid var(--color-accent);
-            opacity: 0;
-            transition: opacity 0.4s ease;
-            pointer-events: none;
-        }
-
-        /* Special glow effect for the Quizy card to match its branding */
-        .card.quizy-card::before {
-            border-color: var(--color-quizy-hover);
-        }
-
-        @media (hover: hover) and (pointer: fine) {
-            .card:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-                border-color: var(--color-accent);
-            }
-
-            .card.quizy-card:hover {
-                border-color: var(--color-quizy-hover);
-                box-shadow: 0 20px 40px rgba(82, 135, 62, 0.2);
-            }
-
-            .card:hover::before {
-                opacity: 0.5;
-            }
-        }
-
-        .card[data-size="2"] {
-            grid-column: span 2;
-        }
-
-        .card[data-size="3"] {
-            grid-column: span 3;
-        }
-
-        .card h2 {
-            font-size: 1.5rem;
-            margin-bottom: 20px;
-            margin-top: -15px;
-            color: var(--color-text-primary);
-            display: flex;
-            align-items: center;
-            font-weight: 700;
-        }
-
-        .card h2 i {
-            margin-right: 12px;
-            color: var(--color-accent);
-            font-size: 1.3rem;
-        }
-
-        .card.quizy-card h2 i {
-            color: var(--color-quizy-hover);
-        }
-
-        .card p {
-            margin-top: -15px;
-            font-size: 1rem;
-            color: var(--color-text-secondary);
-            margin-bottom: 0;
-            flex-grow: 1;
-        }
-
-        .card b {
-            color: var(--color-text-primary);
-            font-weight: 600;
-        }
-
-        .social-links {
-            display: flex;
-            flex-wrap: wrap;
-            margin-top: 20px;
-            gap: 12px;
-        }
-
-        .social-links a img {
-            width: 50px;
-            height: 50px;
-            border-radius: 10px;
-            transition: all 0.3s ease;
-            filter: grayscale(20%);
-        }
-
-        .social-links a img:hover {
-            transform: scale(1.1);
-            filter: grayscale(0%);
-            box-shadow: 0 5px 15px rgba(0, 255, 102, 0.3);
-        }
-
-        footer {
-            text-align: center;
-            padding: 40px 20px;
-            color: var(--color-text-secondary);
-            font-size: 0.9rem;
-            border-top: 1px solid var(--border-color);
-            margin-top: 60px;
-        }
-
-        footer p {
-            margin: 0;
-        }
-
-        @media (max-width: 1024px) {
-            #cards {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .card[data-size="3"] {
-                grid-column: span 2;
-            }
-        }
-
-        @media (max-width: 768px) {
-            #cards {
-                grid-template-columns: 1fr;
-            }
-
-            .card[data-size="2"],
-            .card[data-size="3"] {
-                grid-column: span 1;
-            }
-
-            header {
-                padding: 15px 20px;
-            }
-
-            main h1 {
-                font-size: 2.2rem;
-            }
-
-            /* Scroll animation for cards (progressive enhancement) */
-            .js .card {
-                opacity: 0;
-                transform: translateY(20px);
-                transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease;
-            }
-
-            .js .card.is-visible {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @media (max-width: 600px) {
-            .header-subtitle {
-                display: none;
-            }
-        }
-
-        @media (max-width: 480px) {
-            header {
-                padding: 12px 15px;
-            }
-
-            #header-right {
-                gap: 12px;
-                font-size: 14px;
-            }
-
-            main {
-                padding: 25px 15px;
-            }
-
-            main h1 {
-                font-size: 2rem;
-            }
-
-            main p {
-                font-size: 1rem;
-                margin-bottom: 25px;
-            }
-
-            .card {
-                padding: 20px;
-            }
-
-            .card h2 {
-                margin-top: -5px;
-                font-size: 1.3rem;
-            }
-
-            .card p {
-                margin-top: -5px;
-                font-size: 0.95rem;
-            }
-
-            .social-links {
-                gap: 8px;
-                margin-top: 15px;
-            }
-
-            .social-links a img {
-                width: 44px;
-                height: 44px;
-                border-radius: 8px;
-            }
-
-            footer {
-                margin-top: 40px;
-                padding: 30px 15px;
-            }
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Website</title>
+
+```
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        background-color: #111111;
+        font-family: Arial, sans-serif;
+        height: 100vh;
+        overflow: hidden;
+    }
+
+    /* Titel in het midden */
+    .welcome {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+        color: white;
+        font-size: 55px;
+        font-weight: bold;
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    /* Typvak rechtsboven */
+    .search-box {
+        position: absolute;
+        top: 25px;
+        right: 30px;
+    }
+
+    .search-box input {
+        width: 250px;
+        height: 42px;
+        padding: 10px 15px;
+
+        border: 2px solid white;
+        border-radius: 8px;
+        background-color: #222222;
+        color: white;
+
+        font-size: 16px;
+        outline: none;
+    }
+
+    .search-box input::placeholder {
+        color: #aaaaaa;
+    }
+
+    /* Menu links */
+    .menu {
+        position: absolute;
+        top: 25px;
+        left: 25px;
+
+        width: 220px;
+        height: 500px;
+
+        background-color: #222222;
+        border: 2px solid white;
+        border-radius: 10px;
+
+        padding: 20px;
+    }
+
+    .menu h2 {
+        color: white;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .menu a {
+        display: block;
+        color: white;
+        text-decoration: none;
+
+        padding: 12px;
+        margin-bottom: 10px;
+
+        background-color: #333333;
+        border-radius: 6px;
+        text-align: center;
+    }
+
+    .menu a:hover {
+        background-color: #555555;
+    }
+</style>
+```
+
 </head>
 
 <body>
-    <header>
-        <h1 id="header-title" onclick="location.href='/'"><span>TC_tam</span><span class="header-subtitle"> -
-                Homepage</span></h1>
-        <button id="menu-toggle" aria-label="Toggle Menu"><i class="fa-solid fa-bars"></i></button>
-        <div id="header-right">
-            <a href="https://quizy.tctam.nl"><i class="fa-solid fa-graduation-cap"></i> Quizy</a>
-            <a href="https://old.tctam.nl">Old Website</a>
-            <a href="https://github.com/TCevik">GitHub</a>
 
-            <a href="search.html" class="search-btn"><i class="fa-solid fa-magnifying-glass"></i><span>Go to TC_tam
-                    Search</span></a>
-        </div>
-    </header>
+```
+<!-- Menu links -->
+<div class="menu">
+    <h2>MENU</h2>
 
-    <main>
-        <div>
-            <h1>Welcome to my website</h1>
-            <p>I am a developer working on various projects. This is my homepage where I share my work and interests.
-            </p>
-        </div>
+    <a href="#">Home</a>
+    <a href="#">About</a>
+    <a href="#">Projects</a>
+    <a href="#">Contact</a>
+</div>
 
-        <div id="cards">
-            <div class="card" data-size="2">
-                <h2><i class="fa-solid fa-user-gear"></i> About Me</h2>
-                <p>
-                    <b>My life:</b> ik ben livia maria
-                    <br><br>
-                    <b>Education:</b> ik doe havp
-                </p>
-            </div>
+<!-- Typvak rechtsboven -->
+<div class="search-box">
+    <input type="text" placeholder="Type here...">
+</div>
 
-            <div class="card" data-size="1">
-                <h2><i class="fa-solid fa-envelope"></i> Social Media</h2>
-                <p>Follow me on my social platforms to see my projects, fun moments, and updates!</p>
-                <div class="social-links">
-                    <a href="https://www.snapchat.com/add/tam.c071" target="_blank" rel="noopener noreferrer"><img
-                            src="/assets/social-media/snapchat.png" alt="Snapchat"></a>
-                    <a href="https://www.youtube.com/@Tamer-Cevik" target="_blank" rel="noopener noreferrer"><img
-                            src="/assets/social-media/youtube.svg" alt="YouTube"></a>
-                    <a href="https://www.tiktok.com/@tc_tam" target="_blank" rel="noopener noreferrer"><img
-                            src="/assets/social-media/tiktok.webp" alt="TikTok"></a>
-                    <a href="https://www.instagram.com/tamer.cevik123/" target="_blank" rel="noopener noreferrer"><img
-                            src="/assets/social-media/instagram.png" alt="Instagram"></a>
-                    <a href="https://scratch.mit.edu/users/YT-TC_tam/" target="_blank" rel="noopener noreferrer"><img
-                            src="/assets/social-media/scratch.png" alt="Scratch"></a>
-                    <a href="https://discord.gg/KfMHZRUaxy" target="_blank" rel="noopener noreferrer"><img
-                            src="/assets/social-media/discord.png" alt="Discord"></a>
-                    <a href="https://github.com/TCevik" target="_blank" rel="noopener noreferrer"><img
-                            src="/assets/social-media/github.png" alt="Github"></a>
-                    <a href="https://x.com/YT_TC_tam" target="_blank" rel="noopener noreferrer"><img
-                            src="/assets/social-media/x.avif" alt="X"></a>
-                </div>
-            </div>
+<!-- Welkomsttekst -->
+<div class="welcome">
+    WELCOME TO MY WEBSITE
+</div>
+```
 
-            <div class="card" data-size="2">
-                <h2><i class="fa-solid fa-laptop-code"></i> Online IDE</h2>
-                <p>
-                    Try my renewed <b>Online IDE</b>! Write and test an HTML file combining CSS and
-                    JavaScript with a live interactive preview directly in your browser.
-                    <br><br>
-                    <b>Key Features:</b>
-                <ul
-                    style="margin-top: 5px; margin-bottom: 25px; padding-left: 20px; color: var(--color-text-secondary);">
-                    <li><b>Single-File Workspace:</b> Write all your code in a single HTML file with inline styles and
-                        scripts.</li>
-                    <li><b>Built-in Console:</b> Captures runtime errors and console logs directly inside the console
-                        panel.
-                    </li>
-                    <li><b>Responsive Demos:</b> Instantly simulate Desktop, Tablet, and Mobile screen sizes without
-                        any delay.</li>
-                    <li><b>Security & Management:</b> Import or export your HTML file directly, featuring built-in
-                        close protection against accidental reloading or closing.</li>
-                </ul>
-                <a href="ide" class="ide-btn"><i class="fa-solid fa-play"></i> <span>Open Online IDE</span></a>
-                </p>
-            </div>
-
-            <div class="card quizy-card" data-size="1">
-                <h2><i class="fa-solid fa-graduation-cap"></i> TC_tam Quizy</h2>
-                <p>Learn smarter and get better grades! With <b>Quizy</b> you can create personalized quiz sets and
-                    practice through interactive Flashcards, Practice Tests, Spelling and Matching games. Save your
-                    progress
-                    securely via Google Drive.</p>
-                <div style="margin-top: 20px;">
-                    <a href="https://quizy.tctam.nl" class="quizy-btn"><i class="fa-solid fa-play"></i> <span>Open
-                            Quizy</span></a>
-                </div>
-            </div>
-
-            <div class="card" data-size="1">
-                <h2><i class="fa-solid fa-book-open"></i> My Hobbies</h2>
-                <p>My main interests revolve around creation and comfort. I am a web developer dedicated to building
-                    websites and web-apps using HTML, CSS, and JavaScript. Additionally, I spend my free time on the
-                    simple pleasures of eating good food, getting enough sleep, calling with my girlfriend, and
-                    swimming.</p>
-            </div>
-
-            <div class="card" data-size="2">
-                <h2><i class="fa-solid fa-code"></i> Projects</h2>
-                <p>As a web developer (HTML, CSS, JavaScript), I have built all my projects myself. Highlights include a
-                    Picto Planner for my autistic little brother, the large TC_tam Casino web game (without in-app
-                    purchases), and the Documents editor for saving school notes. My first project was a Chat, which
-                    taught me a lot about databases and authentication; an improved version is in development.</p>
-            </div>
-
-            <div data-size="3">
-                <script async
-                    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8924607946192862"
-                    crossorigin="anonymous"></script>
-                <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8924607946192862"
-                    data-ad-slot="5862330293" data-ad-format="auto" data-full-width-responsive="true"></ins>
-                <script>
-                    (adsbygoogle = window.adsbygoogle || []).push({});
-                </script>
-            </div>
-    </main>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const menuToggle = document.getElementById('menu-toggle');
-            const headerRight = document.getElementById('header-right');
-
-            if (menuToggle && headerRight) {
-                menuToggle.addEventListener('click', () => {
-                    headerRight.classList.toggle('active');
-                    const icon = menuToggle.querySelector('i');
-                    if (headerRight.classList.contains('active')) {
-                        icon.classList.remove('fa-bars');
-                        icon.classList.add('fa-xmark');
-                    } else {
-                        icon.classList.remove('fa-xmark');
-                        icon.classList.add('fa-bars');
-                    }
-                });
-
-                document.addEventListener('click', (e) => {
-                    if (!menuToggle.contains(e.target) && !headerRight.contains(e.target)) {
-                        headerRight.classList.remove('active');
-                        const icon = menuToggle.querySelector('i');
-                        icon.classList.remove('fa-xmark');
-                        icon.classList.add('fa-bars');
-                    }
-                });
-            }
-
-            if (window.innerWidth <= 768) {
-                const cards = document.querySelectorAll('.card');
-
-                const observer = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            entry.target.classList.add('is-visible');
-                        } else {
-                            entry.target.classList.remove('is-visible');
-                        }
-                    });
-                }, {
-                    root: null,
-                    rootMargin: '0px 0px -10% 0px',
-                    threshold: 0.05
-                });
-
-                cards.forEach(card => observer.observe(card));
-            }
-        });
-    </script>
-
-    <footer>
-        <p>&copy; 2023 - Now | Tamer Çevik</p>
-        <p style="margin-top: 10px; font-size: 0.85rem;">
-            <a href="/privacy"
-                style="color: var(--color-text-secondary); text-decoration: none; margin: 0 10px;">Privacybeleid</a> |
-            <a href="/terms"
-                style="color: var(--color-text-secondary); text-decoration: none; margin: 0 10px;">Gebruiksvoorwaarden</a>
-        </p>
-    </footer>
-
-    <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.getRegistrations().then(function (registrations) {
-                for (let registration of registrations) {
-                    registration.unregister().then(function (boolean) {
-                        console.log('Service Worker succesvol verwijderd:', boolean);
-                        // Optioneel: herlaad de pagina eenmalig om de cache volledig te omzeilen
-                        window.location.reload();
-                    });
-                }
-            });
-        }
-    </script>
 </body>
-
 </html>
