@@ -1,40 +1,40 @@
- {
+ *{
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }   
-    body{
-       background-image: url(stars.jpeg);
-       background-size: cover;
-       background-repeat: no-repeat;
-       background-position: center;
-     }
+body{
+   background-image: url(stars.jpeg);
+   background-size: cover;
+   background-repeat: no-repeat;
+   background-position: center;
+}
 
-     h1{
-        display: block;
-        color: rgb(220, 232, 241);
-        text-align: center;
-        padding: 15px;
-        text-decoration: none;
-        }
-         h2{
-            color: rgb(232, 236, 239);
-            text-align: center;
-            padding: 14px 16px;
-            text-decoration: dotted;
-            }
-             h3{
-                color: aliceblue;
-                text-align: center;
-                padding: 14px 16px;
-                text-decoration: dotted;
-                }
-                 h4{
-                    color: rgb(246, 248, 250);
-                    text-align: center;
-                    padding: 14px 16px;
-                    text-decoration: dotted;
-                    } 
+h1{
+   display: block;
+   color: rgb(220, 232, 241);
+   text-align: center;
+   padding: 15px;
+   text-decoration: none;
+}
+h2{
+   color: rgb(232, 236, 239);
+   text-align: center;
+   padding: 14px 16px;
+   text-decoration: dotted;
+}
+h3{
+   color: aliceblue;
+   text-align: center;
+   padding: 14px 16px;
+   text-decoration: dotted;
+}
+h4{
+   color: rgb(246, 248, 250);
+   text-align: center;
+   padding: 14px 16px;
+   text-decoration: dotted;
+} 
 
 .menu{
    position: absolute;
