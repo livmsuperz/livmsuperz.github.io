@@ -40,13 +40,15 @@ h4{
 
 .menu{
    position: fixed;
+   
    top: 100px;
    left: 25px;
 
    width: 220px;
-   height: 500px;
+   height: 545px;
 
    background-color: rgba(3, 3, 40, 0.5);
+   
    border: 2px solid rgb(5, 5, 5);
    border-radius: 10px;
 
@@ -58,6 +60,7 @@ h4{
 .menu h2{
    color: rgb(248, 243, 245);
    text-align: center;
+
    margin-bottom: 25px;
 }                  
 .menu a{
@@ -119,7 +122,7 @@ h4{
    text-align: center;
    
    transition: 0.3s ease;
-   z-index: 0.3s ease;
+   z-index: 1;
 }
 .about-me:hover {
    transform: translate(-50%) scale(1.08);
@@ -144,7 +147,6 @@ h4{
 
 .top-window{
    position: fixed;
-
    top: 0;
    left: 0;
 
@@ -152,20 +154,20 @@ h4{
    height: 70px;
 
    background-color: #280d4b;
-
    border-bottom: 2px solid black;
 
    z-index: 20;
 
    display: flex;
+   justify-content: flex-end;
    align-items: center;
 
    padding-right: 0 30px;
 }
 
 .top-window input{
-   width: 250px;
-   height: 40px;
+   width: 380pxpx;
+   height: 45px;
 
    padding: 10px 15px;
 
@@ -173,13 +175,13 @@ h4{
    color: white;
 
    border: none;
+   outline: none;
+   
    border-radius: 8px;
 
-   font-size: 16px;
-
-   outline: none;
+   font-size: 18px;
 }
 
 .top-window input::placeholder{
-   color: #cccccc;
+   color: white;
 }
