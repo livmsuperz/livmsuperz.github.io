@@ -227,17 +227,17 @@ h4{
 }
 
 .block-left{
-   left: 42%;
+   left: 38%;
    transform: translateX(-50%);
 }
 
 .block-right{
-   left: 70%;
+   left: 74%;
    transform: translateX(-50%);
 }
 
 .info-block:hover{
-   transform: translateX(-50%) scale(1.05);
+   transform: translateX(-50%) scale(1.03);
 
    outline: 3px solid white;
    outline-offset: 8px;
