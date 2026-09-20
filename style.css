@@ -83,7 +83,7 @@ h4{
 .welcome{
    position: absolute;
 
-   top: 130px;
+   top: 170px;
    left: 50%;
 
    transform: translateX(-50%);
@@ -140,4 +140,46 @@ h4{
    color: white;
    font-size: 18px;
    line-height: 1.6;
+}
+
+.top-window{
+   position: fixed;
+
+   top: 0;
+   left: 0;
+
+   width: 100%;
+   height: 70px;
+
+   background-color: #280d4b;
+
+   border-bottom: 2px solid black;
+
+   z-index: 20;
+
+   display: flex;
+   align-items: center;
+
+   padding-right: 0 30px;
+}
+
+.top-window input{
+   width: 250px;
+   height: 40px;
+
+   padding: 10px 15px;
+
+   background-color: #280d4b;
+   color: white;
+
+   border: 2px solid white;
+   border-radius: 8px;
+
+   font-size: 16px;
+
+   outline: none;
+}
+
+.top-window input::placeholder{
+   color: #cccccc;
 }
