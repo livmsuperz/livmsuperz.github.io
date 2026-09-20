@@ -185,3 +185,80 @@ h4{
 .top-window input::placeholder{
    color: white;
 }
+.page title{
+   position: absolute;
+
+   top: 110px;
+   left: 50%;
+
+   transform: translateX(-50%)
+
+   color: white;
+
+   font-size: 38px
+   font-weight: bold;
+
+   text-align: center;
+   white-space: nowrap;
+
+   z-index: 2;
+}
+
+.info-block{
+   position: absolute;
+
+   top: 220px;
+
+   width: 370px;
+   min-height: 300px;
+
+   padding: 30px;
+
+   background-color: #280d4b;
+   color: white;
+
+   border-radius: 15px;
+
+   text-align: center;
+
+   transition: 0.3s ease;
+
+   z-index: 2;
+}
+
+.block-left{
+   left: 42%;
+   transform: translateX(-50%);
+}
+
+.block-right{
+   left: 70%;
+   transform: translateX(-50%);
+}
+
+.info-block:hover{
+   transform: translateX(-50%) scale(1.05);
+
+   outline: 3px solid white;
+   outline-offset: 8px;
+
+   box-shadow: 0 0 25px rgba(255, 255, 255, 0.3);
+}
+
+.info-block h2{
+   color: white;
+
+   font-size: 30px;
+
+   margin-bottom: 25px;
+}
+
+.info-block p{
+   color: white;
+
+   font-size: 17px;
+
+   line-height: 1.6;
+
+   margin-bottom: 15px;
+}
