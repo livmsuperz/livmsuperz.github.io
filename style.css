@@ -8,6 +8,8 @@ body{
    background-size: cover;
    background-repeat: no-repeat;
    background-position: center;
+   min-height: 100vh;
+   font-family: Georgia, serif;
 }
 
 h1{
@@ -37,7 +39,7 @@ h4{
 } 
 
 .menu{
-   position: absolute;
+   position: fixed;
    top: 25px;
    left: 25px;
 
@@ -50,36 +52,64 @@ h4{
 
    padding: 20px;
 
+   z-index: 10;
 }  
+
 .menu h2{
    color: rgb(248, 243, 245);
    text-align: center;
-   margin-bottom: 20px;
+   margin-bottom: 25px;
 }                  
 .menu a{
    display: block;
 
    color: rgb(252, 251, 252);
+   background-color: #280d4b;
+
    text-decoration: none;
    text-align: center;
 
    padding: 12px;
    margin-bottom: 10px;
    
-   background-color: #280d4b;
    border-radius: 6px;
-}
 
+   transition: 0.2s ease;
+}
+.menu a:hover{
+   background-color: #280d4b;
+   transform: scale(1.03);
+}
+.welcome{
+   position: absolute;
+
+   top: 130px;
+   left: 50%;
+
+   transform: translateX(-50%);
+
+   color: rgb(220 232 241);
+
+   font-size: 42px;
+   font-weight: bold;
+
+   text-align: center;
+   white-space: nowrap;
+
+   z-index: 2;
+}
 .about-me {
    position: absolute;
-   top: 50%;
+
+   top: 230px;
    left: 50%;
-   transform: translate(-50%,-50%);
 
-   width: 450px;
-   min-height: 250px;
+   transform: translate(-50%);
 
-   padding: 30px;
+   width: 420px;
+   min-height: 220px;
+
+   padding: 25px;
 
    background-color: #280d4b;
    color: white;
@@ -89,20 +119,25 @@ h4{
    text-align: center;
    
    transition: 0.3s ease;
+   z-index: 0.3s ease;
 }
 .about-me:hover {
-   transform: translate(-50%,-50%) scale(1.08);
+   transform: translate(-50%) scale(1.08);
 
    outline: 3px solid white;
    outline-offset: 8px;
 
    box-shadow:  0 0 25px rgba(255, 255, 255, 0.3);
 }
-.about-me h1 {
+.about-me h2 {
+   color: white;
+
    font-size: 32px;
+
    margin-bottom: 20px;
 }
 .about-me p {
+   color: white;
    font-size: 18px;
    line-height: 1.6;
 }
