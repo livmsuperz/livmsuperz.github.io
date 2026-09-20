@@ -40,7 +40,7 @@ h4{
 
 .menu{
    position: fixed;
-   top: 25px;
+   top: 100px;
    left: 25px;
 
    width: 220px;
@@ -83,7 +83,7 @@ h4{
 .welcome{
    position: absolute;
 
-   top: 170px;
+   top: 135px;
    left: 50%;
 
    transform: translateX(-50%);
@@ -172,7 +172,7 @@ h4{
    background-color: #280d4b;
    color: white;
 
-   border: 2px solid white;
+   border: none;
    border-radius: 8px;
 
    font-size: 16px;
@@ -181,5 +181,5 @@ h4{
 }
 
 .top-window input::placeholder{
-   color: #d92828;
+   color: #cccccc;
 }
