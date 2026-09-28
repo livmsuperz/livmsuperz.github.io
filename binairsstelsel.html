@@ -2,99 +2,153 @@
 <html lang="nl">
 
 <head>
-    <title>Het Binaire Stelsel</title>
-
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Het Binaire Stelsel</title>
 
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body class="binair-page">
+<body>
 
-    <!-- Bovenste venster -->
-    <div class="top-window">
-        <input
-            type="text"
-            placeholder="·.✦ ݁˖Het binaire stelsel.✦ ݁˖·"
-        >
-    </div>
+    <div class="background"></div>
 
 
-    <!-- Menu -->
-    <div class="menu">
+    <!-- Navigatie -->
+    <header class="navbar">
 
-        <h2>MENU</h2>
+        <a href="index.html" class="logo">
+            ✦ Welcome to my website ୭
+        </a>
 
-        <a href="index.html">★Home</a>
-        <a href="pagina2.html">★About me</a>
-        <a href="informatie.html">★Projects</a>
-        <a href="binairsstelsel.html">★Het Binairsstelsel</a>
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="pagina2.html">About me</a>
+            <a href="informatie.html">Projects</a>
+            <a href="binairsstelsel.html" class="active">
+                Binaire stelsel
+            </a>
+        </nav>
 
-    </div>
+        <div class="search-container">
 
+            <input
+                type="search"
+                placeholder="Search..."
+                aria-label="Search"
+            >
 
-    <!-- Titel -->
-    <h1 class="binair-title">
-        ·.✦ ݁˖Het binaire stelsel.✦ ݁˖·
-    </h1>
-
-
-    <!-- Planeten + tekst -->
-    <div class="binair-area">
-
-        <!-- PLANETEN -->
-        <img
-            src="DMT_Elf.png"
-            alt="Planeten"
-            class="binair-planeten"
-        >
-
-
-        <!-- TEKST -->
-        <div class="binair-block">
-
-            <h2>Het binaire stelsel</h2>
-
-            <p>
-                Het binaire stelsel is een getallensysteem dat alleen
-                uit 0 en 1 bestaat. Computers gebruiken het binaire
-                stelsel omdat elektronische onderdelen gemakkelijk
-                twee toestanden kunnen herkennen: aan en uit.
-            </p>
-
-            <p>
-                Alle informatie in een computer, zoals tekst,
-                afbeeldingen, geluid en programma's, wordt uiteindelijk
-                omgezet in nullen en enen.
-            </p>
-
-            <h2>Hoe werkt het?</h2>
-
-            <p>
-                Elke positie in een binair getal heeft een waarde die
-                een macht van 2 is. Een 0 betekent dat een waarde niet
-                wordt gebruikt en een 1 betekent dat deze waarde wel
-                wordt gebruikt.
-            </p>
+            <button type="button" aria-label="Search">
+                🔍
+            </button>
 
         </div>
 
-    </div>
+    </header>
 
 
-    <!-- Voorbeeld -->
-    <div class="binair-example">
+    <!-- Hoofdcontent -->
+    <main>
 
-        <h2>Voorbeeld</h2>
+        <section class="page-card binary-card">
 
-        <p>
-            Het binaire getal <strong>1011</strong> bestaat uit de
-            waarden 8, 4, 2 en 1. De waarden met een 1 worden bij
-            elkaar opgeteld: 8 + 2 + 1 = 11.
-        </p>
+            <span class="small-title">
+                ✦ COMPUTER SCIENCE ✦
+            </span>
 
-    </div>
+            <h1>
+                Het binaire stelsel
+            </h1>
+
+            <p>
+                Het binaire stelsel is een getallensysteem dat alleen
+                uit 0 en 1 bestaat.
+            </p>
+
+            <div class="binary-layout">
+
+                <div class="binary-text">
+
+                    <div class="content-box">
+
+                        <h2>
+                            Hoe werkt het?
+                        </h2>
+
+                        <p>
+                            Computers gebruiken het binaire stelsel
+                            omdat elektronische onderdelen gemakkelijk
+                            twee toestanden kunnen herkennen:
+                            aan en uit.
+                        </p>
+
+                        <p>
+                            Alle informatie in een computer, zoals tekst,
+                            afbeeldingen, geluid en programma's, wordt
+                            uiteindelijk omgezet in nullen en enen.
+                        </p>
+
+                    </div>
+
+
+                    <div class="content-box">
+
+                        <h2>
+                            ✦ Posities
+                        </h2>
+
+                        <p>
+                            Elke positie in een binair getal heeft een
+                            waarde die een macht van 2 is.
+                        </p>
+
+                        <p>
+                            Een 0 betekent dat een waarde niet wordt
+                            gebruikt en een 1 betekent dat deze waarde
+                            wel wordt gebruikt.
+                        </p>
+
+                    </div>
+
+
+                    <div class="content-box">
+
+                        <h2>
+                            ✦ Voorbeeld
+                        </h2>
+
+                        <p>
+                            Het binaire getal <strong>1011</strong>
+                            bestaat uit de waarden 8, 4, 2 en 1.
+                        </p>
+
+                        <p>
+                            De waarden met een 1 worden bij elkaar
+                            opgeteld:
+                        </p>
+
+                        <p>
+                            <strong>8 + 2 + 1 = 11</strong>
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Planeten -->
+                <img
+                    src="DMT_Elf.png"
+                    alt="Planeten"
+                    class="binary-planets"
+                >
+
+            </div>
+
+        </section>
+
+    </main>
 
 </body>
 </html>

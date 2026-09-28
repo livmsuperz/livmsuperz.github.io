@@ -2,7 +2,7 @@
 <html lang="nl">
 
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>About me</title>
@@ -12,83 +12,105 @@
 
 <body>
 
-    <!-- Bovenste venster -->
-    <div class="top-window">
-        <input
-            type="text"
-            placeholder="·.✦ ݁˖About me.✦ ݁˖·"
-        >
-    </div>
+    <div class="background"></div>
 
 
-    <!-- Menu -->
-    <div class="menu">
+    <!-- Navigatie -->
+    <header class="navbar">
 
-        <h2>MENU</h2>
+        <a href="index.html" class="logo">
+            ✦ Welcome to my website ୭
+        </a>
 
-        <a href="index.html">★Home</a>
-        <a href="pagina2.html">★About me</a>
-        <a href="informatie.html">★Projects</a>
-        <a href="binairsstelsel.html">★Het Binairsstelsel</a>
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="pagina2.html" class="active">About me</a>
+            <a href="informatie.html">Projects</a>
+            <a href="binairsstelsel.html">Binaire stelsel</a>
+        </nav>
 
-    </div>
+        <div class="search-container">
 
+            <input
+                type="search"
+                placeholder="Search..."
+                aria-label="Search"
+            >
 
-    <!-- Pagina inhoud -->
-    <main class="about-page">
-
-        <h1 class="page-title">
-            ·✦ About me ✦·
-        </h1>
-
-        <h2 class="page-subtitle">
-            Ik ben Lívia Maria en dit is mijn website
-        </h2>
-
-
-        <div class="info-container">
-
-            <!-- About me -->
-            <section class="info-block">
-
-                <h2>About me</h2>
-
-                <p>
-                    ✦ Hi! Ik ben Lívia Maria en ik ben 15 jaar.
-                    Ik zit in de 4e van de middelbare school.
-                    Ik ben muzikaal en ik vind het leuk om nieuwe
-                    dingen te leren over de ruimte.
-                </p>
-
-                <p>
-                    ✦ Ik vond dit project leuk om te maken omdat ik
-                    nog nooit eerder heb gecodeerd.
-                    Ik kon met dit project zelf bepalen hoe ik mijn
-                    website wilde opmaken en dat vind ik leuk.
-                </p>
-
-            </section>
-
-
-            <!-- Hobby's -->
-            <section class="info-block">
-
-                <h2>My hobby's</h2>
-
-                <p>
-                    ✦ In mijn vrije tijd doe ik verschillende dingen.
-                </p>
-
-                <p>
-                    ✦ Ik luister in mijn vrije tijd veel muziek.
-                    Ik bespeel de gitaar en vroeger ook viool en piano.
-                    Ik zit op voetbal en ik vind het leuk om met mijn
-                    vrienden af te spreken.
-                </p>
-
-            </section>
+            <button type="button" aria-label="Search">
+                🔍
+            </button>
 
         </div>
+
+    </header>
+
+
+    <!-- Hoofdcontent -->
+    <main>
+
+        <section class="page-card about-card">
+
+            <span class="small-title">
+                ✦ ABOUT ME ✦
+            </span>
+
+            <h1>
+                About me
+            </h1>
+
+            <p>
+                Ik ben Lívia Maria en dit is mijn website.
+            </p>
+
+
+            <div class="content-boxes">
+
+                <div class="content-box">
+
+                    <h2>
+                        ✦ About me
+                    </h2>
+
+                    <p>
+                        Hi! Ik ben Lívia Maria en ik ben 15 jaar.
+                        Ik zit in de 4e van de middelbare school.
+                        Ik ben muzikaal en ik vind het leuk om nieuwe
+                        dingen te leren over de ruimte.
+                    </p>
+
+                    <p>
+                        Ik vond dit project leuk om te maken omdat ik
+                        nog nooit eerder heb gecodeerd.
+                        Ik kon met dit project zelf bepalen hoe ik mijn
+                        website wilde opmaken en dat vind ik leuk.
+                    </p>
+
+                </div>
+
+
+                <div class="content-box">
+
+                    <h2>
+                        ✦ My hobby's
+                    </h2>
+
+                    <p>
+                        In mijn vrije tijd doe ik verschillende dingen.
+                    </p>
+
+                    <p>
+                        Ik luister veel muziek, ik bespeel de gitaar
+                        en vroeger ook viool en piano.
+                        Ik zit op voetbal en ik vind het leuk om
+                        met mijn vrienden af te spreken.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
 
     </main>
 
