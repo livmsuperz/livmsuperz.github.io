@@ -1,171 +1,255 @@
+import {
+    HandLandmarker,
+    FilesetResolver
+} from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision/vision_bundle.mjs";
+
+
 const camera = document.getElementById("camera");
 const overlay = document.getElementById("overlay");
 
-const startCameraButton = document.getElementById("startCamera");
-const restartButton = document.getElementById("restart");
-const status = document.getElementById("status");
+const startCameraButton =
+    document.getElementById("startCamera");
+
+const restartButton =
+    document.getElementById("restart");
+
+const status =
+    document.getElementById("status");
+
+const ctx = overlay.getContext("2d");
 
 let stream = null;
-let dotsStarted = false;
+let handLandmarker = null;
+let detecting = false;
 
 
-/* CAMERA STARTEN */
+/* =========================
+   MEDIAPIPE LADEN
+========================= */
 
-startCameraButton.addEventListener("click", async function () {
+async function loadHandTracking() {
 
-    try {
+    status.textContent =
+        "Handherkenning wordt geladen...";
 
-        status.textContent = "Camera wordt gestart...";
+    const vision =
+        await FilesetResolver.forVisionTasks(
+            "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision/wasm"
+        );
 
-        stream = await navigator.mediaDevices.getUserMedia({
-            video: true,
-            audio: false
-        });
+    handLandmarker =
+        await HandLandmarker.createFromOptions(
+            vision,
+            {
+                baseOptions: {
+                    modelAssetPath:
+                        "https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task",
 
-        camera.srcObject = stream;
+                    delegate: "GPU"
+                },
 
-        await camera.play();
+                runningMode: "VIDEO",
 
-        startCameraButton.disabled = true;
-        restartButton.disabled = false;
+                numHands: 2
+            }
+        );
 
-        status.textContent =
-            "Zet je vuisten op de groene bolletjes.";
+    status.textContent =
+        "Handherkenning klaar!";
+}
 
-        setupOverlay();
 
-    } catch (error) {
+/* =========================
+   CAMERA STARTEN
+========================= */
 
-        console.error(error);
+startCameraButton.addEventListener(
+    "click",
+    async function () {
 
-        status.textContent =
-            "Camera kon niet starten: " + error.name;
+        try {
+
+            status.textContent =
+                "Camera wordt gestart...";
+
+            stream =
+                await navigator.mediaDevices.getUserMedia({
+                    video: true,
+                    audio: false
+                });
+
+            camera.srcObject = stream;
+
+            await camera.play();
+
+
+            /* Canvas goed instellen */
+
+            overlay.width =
+                camera.videoWidth;
+
+            overlay.height =
+                camera.videoHeight;
+
+
+            startCameraButton.disabled = true;
+            restartButton.disabled = false;
+
+
+            /* Handherkenning laden */
+
+            await loadHandTracking();
+
+
+            status.textContent =
+                "Steek je handen in beeld.";
+
+
+            detecting = true;
+
+            detectHands();
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            status.textContent =
+                "Fout: " + error.message;
+        }
     }
-});
+);
 
 
-/* CANVAS INSTELLEN */
+/* =========================
+   HANDEN HERKENNEN
+========================= */
 
-function setupOverlay() {
+async function detectHands() {
 
-    if (camera.videoWidth === 0 || camera.videoHeight === 0) {
-        setTimeout(setupOverlay, 100);
+    if (!detecting) {
         return;
     }
 
-    overlay.width = camera.videoWidth;
-    overlay.height = camera.videoHeight;
 
-    if (!dotsStarted) {
-        dotsStarted = true;
-        drawDots();
+    if (
+        camera.readyState >= 2 &&
+        handLandmarker
+    ) {
+
+        const results =
+            handLandmarker.detectForVideo(
+                camera,
+                performance.now()
+            );
+
+
+        ctx.clearRect(
+            0,
+            0,
+            overlay.width,
+            overlay.height
+        );
+
+
+        if (
+            results.landmarks &&
+            results.landmarks.length > 0
+        ) {
+
+            status.textContent =
+                "👋 Hand gevonden!";
+
+            drawHands(results.landmarks);
+
+        } else {
+
+            status.textContent =
+                "Steek je handen in beeld.";
+        }
+    }
+
+
+    requestAnimationFrame(detectHands);
+}
+
+
+/* =========================
+   HANDPUNTEN TEKENEN
+========================= */
+
+function drawHands(hands) {
+
+    for (const hand of hands) {
+
+        for (const point of hand) {
+
+            const x =
+                point.x * overlay.width;
+
+            const y =
+                point.y * overlay.height;
+
+
+            ctx.beginPath();
+
+            ctx.arc(
+                x,
+                y,
+                5,
+                0,
+                Math.PI * 2
+            );
+
+            ctx.fillStyle =
+                "#00ff55";
+
+            ctx.fill();
+        }
     }
 }
 
 
-/* GROENE BOLLETJES */
+/* =========================
+   OPNIEUW
+========================= */
 
-function drawDots() {
+restartButton.addEventListener(
+    "click",
+    function () {
 
-    const ctx = overlay.getContext("2d");
-
-    ctx.clearRect(
-        0,
-        0,
-        overlay.width,
-        overlay.height
-    );
+        detecting = false;
 
 
-    // LINKER BOLLETJE
-    drawDot(
-        ctx,
-        overlay.width * 0.35,
-        overlay.height * 0.35
-    );
+        if (stream) {
+
+            stream.getTracks().forEach(
+                function (track) {
+                    track.stop();
+                }
+            );
+
+            stream = null;
+        }
 
 
-    // RECHTER BOLLETJE
-    drawDot(
-        ctx,
-        overlay.width * 0.65,
-        overlay.height * 0.35
-    );
+        camera.srcObject = null;
 
 
-    requestAnimationFrame(drawDots);
-}
+        ctx.clearRect(
+            0,
+            0,
+            overlay.width,
+            overlay.height
+        );
 
 
-/* ÉÉN BOLLETJE */
+        startCameraButton.disabled = false;
 
-function drawDot(ctx, x, y) {
-
-    // Gloed
-    ctx.beginPath();
-
-    ctx.arc(
-        x,
-        y,
-        30,
-        0,
-        Math.PI * 2
-    );
-
-    ctx.fillStyle = "rgba(0, 255, 80, 0.35)";
-    ctx.fill();
+        restartButton.disabled = true;
 
 
-    // Groene kern
-    ctx.beginPath();
-
-    ctx.arc(
-        x,
-        y,
-        15,
-        0,
-        Math.PI * 2
-    );
-
-    ctx.fillStyle = "#00ff55";
-    ctx.fill();
-
-
-    // Witte rand
-    ctx.strokeStyle = "white";
-    ctx.lineWidth = 3;
-    ctx.stroke();
-}
-
-
-/* OPNIEUW */
-
-restartButton.addEventListener("click", function () {
-
-    if (stream) {
-
-        stream.getTracks().forEach(function (track) {
-            track.stop();
-        });
-
-        stream = null;
+        status.textContent =
+            "Camera uit.";
     }
-
-    camera.srcObject = null;
-
-    const ctx = overlay.getContext("2d");
-
-    ctx.clearRect(
-        0,
-        0,
-        overlay.width,
-        overlay.height
-    );
-
-    dotsStarted = false;
-
-    startCameraButton.disabled = false;
-    restartButton.disabled = true;
-
-    status.textContent = "Camera uit.";
-});
+);
