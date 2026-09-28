@@ -1,5 +1,5 @@
 /* =========================================
-   ALGEMENE INSTELLINGEN
+   BASIS
    ========================================= */
 
 * {
@@ -14,13 +14,14 @@ html {
 
 body {
     min-height: 100vh;
+
     font-family: Georgia, serif;
     color: white;
 
     background-image:
         linear-gradient(
-            rgba(5, 5, 35, 0.25),
-            rgba(15, 5, 40, 0.45)
+            rgba(8, 5, 30, 0.25),
+            rgba(15, 5, 40, 0.35)
         ),
         url("stars.jpeg");
 
@@ -51,17 +52,14 @@ body {
 
     padding: 0 30px;
 
-    background: rgba(20, 10, 55, 0.82);
+    background: rgba(20, 10, 55, 0.92);
 
-    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 
     box-shadow:
-        0 5px 25px rgba(0, 0, 0, 0.35),
-        0 0 20px rgba(120, 80, 255, 0.15);
+        0 5px 25px rgba(0, 0, 0, 0.35);
 
-    backdrop-filter: blur(10px);
-
-    z-index: 20;
+    z-index: 100;
 }
 
 .top-window input {
@@ -72,25 +70,21 @@ body {
 
     padding: 10px 15px;
 
-    background: rgba(10, 5, 35, 0.45);
+    background: rgba(5, 3, 25, 0.5);
 
     color: white;
 
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.25);
     border-radius: 10px;
 
     outline: none;
 
     font-family: Georgia, serif;
     font-size: 17px;
-
-    box-shadow:
-        inset 0 0 10px rgba(0, 0, 0, 0.2),
-        0 0 15px rgba(130, 90, 255, 0.08);
 }
 
 .top-window input::placeholder {
-    color: rgba(255, 255, 255, 0.9);
+    color: white;
 }
 
 
@@ -108,32 +102,28 @@ body {
 
     padding: 20px;
 
-    background: rgba(15, 7, 45, 0.78);
+    background: rgba(18, 8, 48, 0.9);
 
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 18px;
 
     box-shadow:
-        0 10px 35px rgba(0, 0, 0, 0.4),
-        0 0 25px rgba(100, 60, 220, 0.15);
+        0 10px 30px rgba(0, 0, 0, 0.4);
 
-    backdrop-filter: blur(10px);
-
-    z-index: 10;
+    z-index: 90;
 }
 
 .menu h2 {
     margin-bottom: 20px;
 
+    padding: 0;
+
     color: white;
 
+    font-size: 21px;
+
     text-align: center;
-
-    font-size: 20px;
     letter-spacing: 2px;
-
-    text-shadow:
-        0 0 8px rgba(255, 255, 255, 0.4);
 }
 
 .menu a {
@@ -144,7 +134,7 @@ body {
 
     color: white;
 
-    background: rgba(70, 25, 120, 0.75);
+    background: #321060;
 
     border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 10px;
@@ -153,140 +143,121 @@ body {
     text-align: center;
 
     transition:
-        transform 0.25s ease,
         background 0.25s ease,
+        transform 0.25s ease,
         box-shadow 0.25s ease;
 }
 
 .menu a:hover {
-    transform: translateX(5px);
+    background: #4b1b85;
 
-    background: rgba(100, 50, 170, 0.85);
+    transform: translateX(4px);
 
     box-shadow:
-        0 0 15px rgba(150, 100, 255, 0.35);
+        0 0 15px rgba(150, 100, 255, 0.3);
 }
 
 
 /* =========================================
-   TITELS
+   GEMEENSCHAPPELIJKE CONTENT
    ========================================= */
 
-h1,
-h2,
-h3,
-h4 {
-    color: white;
+/*
+   Alles rechts van het menu.
+*/
+
+.welcome,
+.page-title,
+body > h3,
+.binair-title {
+    margin-left: 270px;
+    margin-right: 30px;
 }
+
+
+/* =========================================
+   HOMEPAGE
+   ========================================= */
 
 .welcome {
-    margin-top: 125px;
-    margin-left: 260px;
-    margin-right: 40px;
+    padding-top: 135px;
+    padding-bottom: 25px;
 
-    padding: 20px;
-
-    font-size: clamp(30px, 4vw, 42px);
+    font-size: clamp(30px, 4vw, 43px);
 
     text-align: center;
 
     text-shadow:
-        0 0 10px rgba(180, 150, 255, 0.5),
-        0 3px 15px rgba(0, 0, 0, 0.5);
-}
-
-.page-title {
-    margin-top: 105px;
-    margin-left: 260px;
-    margin-right: 40px;
-
-    padding: 20px;
-
-    font-size: clamp(30px, 4vw, 40px);
-
-    text-align: center;
-
-    text-shadow:
-        0 0 10px rgba(180, 150, 255, 0.5),
-        0 3px 15px rgba(0, 0, 0, 0.5);
+        0 0 12px rgba(190, 160, 255, 0.55),
+        0 3px 15px rgba(0, 0, 0, 0.6);
 }
 
 
-/* =========================================
-   HOME / INTRODUCTIE
-   ========================================= */
+/* Homepage tekstblok */
 
-.about-me {
+body > .about-me {
     position: relative;
 
-    width: min(500px, calc(100% - 350px));
+    width: min(600px, calc(100% - 350px));
 
-    margin-left: 350px;
+    margin-left: auto;
     margin-right: auto;
-    margin-top: 20px;
 
-    padding: 32px;
+    padding: 30px;
 
     background:
         linear-gradient(
             135deg,
-            rgba(60, 25, 100, 0.88),
-            rgba(25, 10, 60, 0.88)
+            rgba(62, 25, 105, 0.94),
+            rgba(25, 10, 60, 0.94)
         );
 
-    border: 1px solid rgba(255, 255, 255, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 20px;
 
     text-align: center;
 
     box-shadow:
-        0 15px 40px rgba(0, 0, 0, 0.4),
-        0 0 25px rgba(110, 70, 220, 0.15);
-
-    backdrop-filter: blur(8px);
+        0 15px 40px rgba(0, 0, 0, 0.4);
 
     transition:
         transform 0.3s ease,
         box-shadow 0.3s ease;
 }
 
-.about-me:hover {
+body > .about-me:hover {
     transform: translateY(-6px);
 
     box-shadow:
         0 20px 45px rgba(0, 0, 0, 0.5),
-        0 0 30px rgba(150, 100, 255, 0.25);
+        0 0 25px rgba(150, 100, 255, 0.25);
 }
 
-.about-me h2 {
+body > .about-me h2 {
+    padding: 0;
+
     margin-bottom: 20px;
 
-    font-size: 28px;
-
-    text-shadow:
-        0 0 10px rgba(255, 255, 255, 0.3);
+    font-size: 29px;
 }
 
-.about-me p {
+body > .about-me p {
     font-size: 17px;
     line-height: 1.7;
 
-    color: rgba(255, 255, 255, 0.9);
+    color: rgba(255, 255, 255, 0.92);
 }
 
 
-/* =========================================
-   ASTRONAUT
-   ========================================= */
+/* Astronaut */
 
 .astronaut {
-    position: fixed;
+    position: absolute;
 
-    right: 50px;
-    bottom: 30px;
+    right: 45px;
+    top: 190px;
 
-    width: 270px;
-    max-width: 25vw;
+    width: 280px;
 
     height: auto;
 
@@ -294,31 +265,74 @@ h4 {
     outline: none;
 
     filter:
-        drop-shadow(0 0 12px rgba(150, 120, 255, 0.35))
-        drop-shadow(0 15px 20px rgba(0, 0, 0, 0.4));
+        drop-shadow(0 0 15px rgba(160, 130, 255, 0.4));
 
-    transition:
-        transform 0.4s ease,
-        filter 0.4s ease;
+    transition: transform 0.3s ease;
 }
 
 .astronaut:hover {
-    transform: translateY(-10px) rotate(2deg);
-
-    filter:
-        drop-shadow(0 0 20px rgba(180, 150, 255, 0.65))
-        drop-shadow(0 20px 25px rgba(0, 0, 0, 0.45));
+    transform: translateY(-8px) rotate(2deg);
 }
 
 
 /* =========================================
-   ABOUT ME BLOKKEN
+   ABOUT ME PAGINA
    ========================================= */
 
-.info-block {
+.about-page {
+    width: calc(100% - 270px);
+
+    margin-left: 270px;
+
+    padding: 110px 40px 70px;
+}
+
+.about-page .page-title {
+    margin: 0;
+
+    padding: 15px;
+
+    font-size: 40px;
+
+    text-align: center;
+
+    text-shadow:
+        0 0 12px rgba(190, 160, 255, 0.6);
+}
+
+.page-subtitle {
+    margin: 5px auto 35px;
+
+    color: rgba(255, 255, 255, 0.85);
+
+    font-size: 20px;
+
+    text-align: center;
+
+    font-weight: normal;
+}
+
+
+/* Twee blokken naast elkaar */
+
+.info-container {
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 30px;
+}
+
+
+/* About kaarten */
+
+.about-page .info-block {
     position: relative;
 
-    width: 370px;
+    width: 100%;
+
     min-height: 300px;
 
     padding: 30px;
@@ -326,552 +340,72 @@ h4 {
     background:
         linear-gradient(
             135deg,
-            rgba(60, 25, 100, 0.9),
-            rgba(25, 10, 60, 0.9)
+            rgba(62, 25, 105, 0.94),
+            rgba(25, 10, 60, 0.94)
         );
 
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    border-radius: 20px;
-
-    text-align: center;
-
-    box-shadow:
-        0 15px 40px rgba(0, 0, 0, 0.4),
-        0 0 20px rgba(110, 70, 220, 0.15);
-
-    transition:
-        transform 0.3s ease,
-        box-shadow 0.3s ease;
-}
-
-.block-left {
-    margin-left: 28%;
-    margin-top: 15px;
-}
-
-.block-right {
-    margin-left: 57%;
-    margin-top: -300px;
-}
-
-.info-block:hover {
-    transform: translateY(-8px);
-
-    box-shadow:
-        0 20px 45px rgba(0, 0, 0, 0.5),
-        0 0 30px rgba(150, 100, 255, 0.3);
-}
-
-.info-block h2 {
-    margin-bottom: 20px;
-
-    font-size: 28px;
-
-    text-shadow:
-        0 0 10px rgba(255, 255, 255, 0.3);
-}
-
-.info-block p {
-    margin-bottom: 15px;
-
-    font-size: 16px;
-    line-height: 1.7;
-
-    color: rgba(255, 255, 255, 0.9);
-}
-
-
-/* =========================================
-   BINAIRE PAGINA
-   ========================================= */
-
-.binair-page {
-    overflow-x: hidden;
-}
-
-.binair-title {
-    margin-top: 105px;
-    margin-left: 250px;
-    margin-right: 30px;
-
-    padding: 20px;
-
-    font-size: 40px;
-
-    text-align: center;
-
-    text-shadow:
-        0 0 12px rgba(170, 130, 255, 0.5);
-}
-
-.binair-area {
-    position: relative;
-
-    width: min(1050px, calc(100% - 300px));
-
-    min-height: 600px;
-
-    margin-left: 280px;
-    margin-right: 40px;
-    margin-top: 20px;
-}
-
-.binair-planeten {
-    position: absolute;
-
-    right: -70px;
-    top: 20px;
-
-    width: 500px;
-    max-width: 50%;
-
-    height: auto;
-
-    border: none;
-    outline: none;
-
-    filter:
-        drop-shadow(0 0 20px rgba(100, 100, 255, 0.25));
-}
-
-.binair-block {
-    position: absolute;
-
-    left: 20px;
-    top: 100px;
-
-    width: 570px;
-    max-width: 60%;
-
-    padding: 32px;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(60, 25, 100, 0.92),
-            rgba(20, 10, 55, 0.92)
-        );
-
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    border-radius: 20px;
-
-    text-align: center;
-
-    box-shadow:
-        0 15px 40px rgba(0, 0, 0, 0.45),
-        0 0 25px rgba(110, 70, 220, 0.2);
-
-    transition:
-        transform 0.3s ease,
-        box-shadow 0.3s ease;
-}
-
-.binair-block:hover {
-    transform: translateY(-6px);
-
-    box-shadow:
-        0 20px 45px rgba(0, 0, 0, 0.5),
-        0 0 30px rgba(150, 100, 255, 0.3);
-}
-
-.binair-block h2 {
-    margin-bottom: 18px;
-
-    font-size: 28px;
-}
-
-.binair-block p {
-    margin-bottom: 20px;
-
-    font-size: 16px;
-    line-height: 1.7;
-
-    color: rgba(255, 255, 255, 0.9);
-}
-
-
-/* =========================================
-   BINAIRE VOORBEELD
-   ========================================= */
-
-.binair-example {
-    width: 570px;
-    max-width: calc(100% - 300px);
-
-    margin-left: 280px;
-    margin-top: -20px;
-    margin-bottom: 60px;
-
-    padding: 28px;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(60, 25, 100, 0.9),
-            rgba(25, 10, 60, 0.9)
-        );
-
-    border: 1px solid rgba(255, 255, 255, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 20px;
 
     text-align: center;
 
     box-shadow:
         0 15px 40px rgba(0, 0, 0, 0.4);
-}
-
-.binair-example h2 {
-    margin-bottom: 15px;
-
-    font-size: 27px;
-}
-
-.binair-example p {
-    font-size: 16px;
-    line-height: 1.7;
-
-    color: rgba(255, 255, 255, 0.9);
-}
-
-
-/* =========================================
-   MOBIELE VERSIE
-   ========================================= */
-
-@media (max-width: 900px) {
-
-    .menu {
-        position: relative;
-
-        top: auto;
-        left: auto;
-
-        width: calc(100% - 30px);
-
-        margin: 90px auto 20px;
-
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 8px;
-    }
-
-    .menu h2 {
-        width: 100%;
-    }
-
-    .menu a {
-        flex: 1 1 180px;
-        margin-bottom: 0;
-    }
-
-    .welcome,
-    .page-title,
-    .binair-title {
-        margin: 30px 20px 20px;
-    }
-
-    .about-me {
-        width: calc(100% - 40px);
-
-        margin: 20px auto;
-    }
-
-    .astronaut {
-        position: relative;
-
-        right: auto;
-        bottom: auto;
-
-        display: block;
-
-        width: 220px;
-        max-width: 60%;
-
-        margin: 30px auto;
-    }
-
-    .info-block {
-        width: calc(100% - 40px);
-
-        margin: 20px auto;
-    }
-
-    .block-right {
-        margin: 20px auto;
-    }
-
-    .binair-area {
-        width: calc(100% - 40px);
-
-        margin: 20px auto;
-
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .binair-planeten {
-        position: relative;
-
-        right: auto;
-        top: auto;
-
-        width: 70%;
-        max-width: 450px;
-
-        margin-bottom: -70px;
-
-        z-index: 1;
-    }
-
-    .binair-block {
-        position: relative;
-
-        left: auto;
-        top: auto;
-
-        width: 100%;
-        max-width: 600px;
-
-        z-index: 2;
-    }
-
-    .binair-example {
-        width: calc(100% - 40px);
-        max-width: 600px;
-
-        margin: 30px auto 50px;
-    }
-}
-
-
-/* =========================================
-   KLEINE TELEFOONS
-   ========================================= */
-
-@media (max-width: 500px) {
-
-    .top-window {
-        padding: 0 15px;
-    }
-
-    .top-window input {
-        width: 100%;
-        font-size: 14px;
-    }
-
-    .menu {
-        margin-top: 90px;
-    }
-
-    .menu a {
-        flex-basis: 100%;
-    }
-
-    .welcome,
-    .page-title,
-    .binair-title {
-        font-size: 28px;
-    }
-
-    .about-me {
-        padding: 25px 20px;
-    }
-
-    .info-block {
-        padding: 25px 20px;
-    }
-
-    .binair-block {
-        padding: 25px 20px;
-    }
-
-    .binair-planeten {
-        width: 90%;
-        margin-bottom: -40px;
-    }
-
-    .astronaut {
-        width: 180px;
-    }
-}
-/* =========================================
-   ABOUT ME PAGINA - NIEUWE LAYOUT
-   ========================================= */
-
-.about-page {
-    width: calc(100% - 300px);
-    margin-left: 270px;
-    padding: 105px 40px 70px;
-}
-
-
-/* Pagina titel */
-
-.about-page .page-title {
-    position: static;
-
-    margin: 0;
-    padding: 20px;
-
-    font-size: 40px;
-
-    text-align: center;
-
-    white-space: normal;
-
-    text-shadow:
-        0 0 12px rgba(180, 150, 255, 0.6),
-        0 3px 15px rgba(0, 0, 0, 0.5);
-}
-
-
-/* Kleine tekst onder titel */
-
-.page-subtitle {
-    margin: 5px auto 35px;
-
-    color: rgba(255, 255, 255, 0.85);
-
-    font-size: 21px;
-
-    text-align: center;
-
-    font-weight: normal;
-
-    text-shadow:
-        0 2px 8px rgba(0, 0, 0, 0.5);
-}
-
-
-/* De twee blokken */
-
-.info-container {
-    width: 100%;
-
-    display: grid;
-
-    grid-template-columns: repeat(2, minmax(280px, 1fr));
-
-    gap: 30px;
-
-    align-items: stretch;
-}
-
-
-/* Info kaarten */
-
-.about-page .info-block {
-    position: static;
-
-    width: auto;
-    min-height: 0;
-
-    margin: 0;
-
-    padding: 32px;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(60, 25, 100, 0.92),
-            rgba(25, 10, 60, 0.92)
-        );
-
-    border: 1px solid rgba(255, 255, 255, 0.2);
-
-    border-radius: 20px;
-
-    text-align: center;
-
-    box-shadow:
-        0 15px 40px rgba(0, 0, 0, 0.4),
-        0 0 25px rgba(120, 80, 220, 0.15);
-
-    backdrop-filter: blur(8px);
 
     transition:
         transform 0.3s ease,
         box-shadow 0.3s ease;
 }
 
-
-/* Hover */
-
 .about-page .info-block:hover {
     transform: translateY(-7px);
 
     box-shadow:
         0 20px 45px rgba(0, 0, 0, 0.5),
-        0 0 30px rgba(160, 120, 255, 0.3);
+        0 0 25px rgba(150, 100, 255, 0.3);
 }
-
-
-/* Kaart titels */
 
 .about-page .info-block h2 {
-    margin-bottom: 22px;
-
     padding: 0;
 
+    margin-bottom: 20px;
+
     font-size: 28px;
-
-    color: white;
-
-    text-shadow:
-        0 0 10px rgba(255, 255, 255, 0.25);
 }
-
-
-/* Kaart tekst */
 
 .about-page .info-block p {
     margin-bottom: 18px;
 
-    color: rgba(255, 255, 255, 0.9);
-
     font-size: 16px;
+    line-height: 1.7;
 
-    line-height: 1.75;
+    color: rgba(255, 255, 255, 0.92);
 }
 
 
-/* =========================================
-   ABOUT ME OP TELEFOON
-   ========================================= */
-
-@media (max-width: 900px) {
-
-    .about-page {
-        width: 100%;
-
-        margin-left: 0;
-
-        padding: 30px 20px 60px;
-    }
-
-    .info-container {
-        grid-template-columns: 1fr;
-
-        gap: 20px;
-    }
-
-    .about-page .page-title {
-        font-size: 32px;
-    }
-
-    .page-subtitle {
-        font-size: 18px;
-
-        line-height: 1.5;
-    }
-}
 /* =========================================
    PROJECTS PAGINA
    ========================================= */
 
-body:not(.binair-page) .about-me {
+body > h3 {
+    padding-top: 105px;
+    padding-bottom: 20px;
+
+    font-size: 38px;
+
+    text-align: center;
+
+    text-shadow:
+        0 0 12px rgba(190, 160, 255, 0.6);
+}
+
+
+/*
+   Project-kaart.
+   Dit is bewust niet absoluut geplaatst.
+*/
+
+body > h3 + .about-me {
     position: relative;
 
     top: auto;
@@ -881,25 +415,15 @@ body:not(.binair-page) .about-me {
 
     width: min(600px, calc(100% - 350px));
 
-    margin-left: 350px;
-    margin-top: 25px;
+    margin: 0 auto 60px;
 
     padding: 32px;
 
     min-height: auto;
 }
 
-body:not(.binair-page) h3 {
-    margin-left: 250px;
-    margin-right: 30px;
-
-    margin-top: 105px;
-    margin-bottom: 5px;
-
-    font-size: 36px;
-
-    text-shadow:
-        0 0 12px rgba(180, 150, 255, 0.5);
+body > h3 + .about-me:hover {
+    transform: translateY(-6px);
 }
 
 
@@ -908,7 +432,7 @@ body:not(.binair-page) h3 {
    ========================================= */
 
 .binair-page {
-    padding-top: 1px;
+    min-height: 100vh;
 }
 
 
@@ -922,9 +446,8 @@ body:not(.binair-page) h3 {
 
     transform: none;
 
-    margin: 105px 30px 25px 270px;
-
-    padding: 15px;
+    padding-top: 115px;
+    padding-bottom: 25px;
 
     font-size: 40px;
 
@@ -933,127 +456,246 @@ body:not(.binair-page) h3 {
     white-space: normal;
 
     text-shadow:
-        0 0 12px rgba(180, 150, 255, 0.6);
+        0 0 12px rgba(190, 160, 255, 0.6);
 }
 
 
 /* Gebied */
 
-.binair-page .binair-area {
+.binair-area {
     position: relative;
 
     width: calc(100% - 310px);
 
-    max-width: 1050px;
+    min-height: 560px;
 
-    min-height: 600px;
-
-    height: auto;
-
-    margin: 0 30px 0 270px;
+    margin-left: 270px;
+    margin-right: 40px;
 
     display: flex;
 
     align-items: center;
-
     justify-content: center;
 }
 
 
 /* Planeten */
 
-.binair-page .binair-planeten {
+.binair-planeten {
     position: absolute;
 
-    right: -120px;
-    top: 20px;
+    right: 0;
+    top: 10px;
 
     width: 500px;
-
-    max-width: 48%;
+    max-width: 45%;
 
     height: auto;
 
-    z-index: 1;
+    border: none;
+    outline: none;
+    box-shadow: none;
 
     filter:
         drop-shadow(0 0 15px rgba(120, 100, 255, 0.25));
+
+    z-index: 1;
 }
 
 
-/* Tekstblok */
+/* Binaire tekst */
 
-.binair-page .binair-block {
+.binair-block {
     position: relative;
-
-    left: auto;
-    top: auto;
 
     width: 570px;
 
-    max-width: 65%;
+    max-width: 60%;
 
-    margin-right: 260px;
+    margin-right: 300px;
 
     padding: 32px;
 
     background:
         linear-gradient(
             135deg,
-            rgba(60, 25, 100, 0.94),
+            rgba(62, 25, 105, 0.94),
             rgba(25, 10, 60, 0.94)
         );
 
     border: 1px solid rgba(255, 255, 255, 0.2);
-
     border-radius: 20px;
 
     text-align: center;
 
+    box-shadow:
+        0 15px 40px rgba(0, 0, 0, 0.4);
+
     z-index: 2;
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.binair-block:hover {
+    transform: translateY(-6px);
+
+    box-shadow:
+        0 20px 45px rgba(0, 0, 0, 0.5),
+        0 0 25px rgba(150, 100, 255, 0.3);
+}
+
+.binair-block h2 {
+    padding: 0;
+
+    margin-bottom: 18px;
+
+    font-size: 28px;
+}
+
+.binair-block p {
+    margin-bottom: 20px;
+
+    font-size: 16px;
+
+    line-height: 1.7;
+
+    color: rgba(255, 255, 255, 0.92);
 }
 
 
-/* Voorbeeld */
+/* =========================================
+   BINAIRE VOORBEELD
+   ========================================= */
 
-.binair-page .binair-example {
+.binair-example {
     width: 570px;
 
     max-width: calc(100% - 310px);
 
-    margin: -50px auto 60px;
     margin-left: 300px;
+
+    margin-top: -40px;
+    margin-bottom: 60px;
 
     padding: 28px;
 
     background:
         linear-gradient(
             135deg,
-            rgba(60, 25, 100, 0.92),
-            rgba(25, 10, 60, 0.92)
+            rgba(62, 25, 105, 0.94),
+            rgba(25, 10, 60, 0.94)
         );
 
     border: 1px solid rgba(255, 255, 255, 0.2);
-
     border-radius: 20px;
 
     text-align: center;
+
+    box-shadow:
+        0 15px 40px rgba(0, 0, 0, 0.4);
+}
+
+.binair-example h2 {
+    padding: 0;
+
+    margin-bottom: 15px;
+
+    font-size: 28px;
+}
+
+.binair-example p {
+    font-size: 16px;
+
+    line-height: 1.7;
+
+    color: rgba(255, 255, 255, 0.92);
 }
 
 
 /* =========================================
-   BINAIRE PAGINA - KLEINER SCHERM
+   TABLET
    ========================================= */
 
-@media (max-width: 900px) {
+@media (max-width: 950px) {
 
-    .binair-page .binair-title {
-        margin: 30px 20px 20px;
+    .menu {
+        position: relative;
 
-        font-size: 32px;
+        top: auto;
+        left: auto;
+
+        width: calc(100% - 40px);
+
+        margin: 95px 20px 20px;
+
+        display: flex;
+        flex-wrap: wrap;
+
+        justify-content: center;
+
+        gap: 8px;
     }
 
-    .binair-page .binair-area {
+    .menu h2 {
+        width: 100%;
+
+        margin-bottom: 8px;
+    }
+
+    .menu a {
+        flex: 1 1 180px;
+
+        margin-bottom: 0;
+    }
+
+    .welcome,
+    .page-title,
+    body > h3,
+    .binair-title {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+
+    .welcome {
+        padding-top: 30px;
+    }
+
+    body > .about-me,
+    body > h3 + .about-me {
+        width: calc(100% - 40px);
+
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+
+    .astronaut {
+        position: relative;
+
+        top: auto;
+        right: auto;
+
+        display: block;
+
+        width: 220px;
+
+        margin: 30px auto;
+    }
+
+    .about-page {
+        width: 100%;
+
+        margin-left: 0;
+
+        padding: 30px 20px 60px;
+    }
+
+    .info-container {
+        grid-template-columns: 1fr;
+    }
+
+    .binair-area {
         width: calc(100% - 40px);
 
         margin: 0 20px;
@@ -1064,7 +706,7 @@ body:not(.binair-page) h3 {
         flex-direction: column;
     }
 
-    .binair-page .binair-planeten {
+    .binair-planeten {
         position: relative;
 
         right: auto;
@@ -1078,7 +720,7 @@ body:not(.binair-page) h3 {
         z-index: 1;
     }
 
-    .binair-page .binair-block {
+    .binair-block {
         width: 100%;
         max-width: 650px;
 
@@ -1087,10 +729,75 @@ body:not(.binair-page) h3 {
         z-index: 2;
     }
 
-    .binair-page .binair-example {
+    .binair-example {
         width: calc(100% - 40px);
+
         max-width: 650px;
 
         margin: 30px auto 50px;
+    }
+}
+
+
+/* =========================================
+   TELEFOON
+   ========================================= */
+
+@media (max-width: 550px) {
+
+    .top-window {
+        padding: 0 15px;
+    }
+
+    .top-window input {
+        width: 100%;
+
+        font-size: 14px;
+    }
+
+    .menu {
+        width: calc(100% - 30px);
+
+        margin-left: 15px;
+        margin-right: 15px;
+    }
+
+    .menu a {
+        flex-basis: 100%;
+    }
+
+    .welcome {
+        font-size: 28px;
+    }
+
+    .about-page .page-title,
+    .binair-page .binair-title {
+        font-size: 30px;
+    }
+
+    body > h3 {
+        font-size: 30px;
+    }
+
+    body > .about-me {
+        padding: 25px 20px;
+    }
+
+    .about-page .info-block {
+        padding: 25px 20px;
+    }
+
+    .binair-block {
+        padding: 25px 20px;
+    }
+
+    .binair-planeten {
+        width: 90%;
+
+        margin-bottom: -40px;
+    }
+
+    .astronaut {
+        width: 180px;
     }
 }
