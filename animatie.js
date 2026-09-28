@@ -10,19 +10,24 @@ const startCameraButton = document.getElementById("startCamera");
 const restartButton = document.getElementById("restart");
 const status = document.getElementById("status");
 
+const poseTitle = document.getElementById("poseTitle");
+const progressText = document.getElementById("progressText");
+
 const ctx = overlay.getContext("2d");
 
 let stream = null;
 let handLandmarker = null;
 let detecting = false;
 
-let pose1Captured = false;
+let currentPose = 1;
 let captureTimer = null;
 
+let capturedFrames = [];
 
-/* =========================
-   HANDHERKENNING LADEN
-========================= */
+
+// ================================
+// MEDIAPIPE LADEN
+// ================================
 
 async function loadHandTracking() {
 
@@ -32,78 +37,91 @@ async function loadHandTracking() {
         "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision/wasm"
     );
 
-    handLandmarker = await HandLandmarker.createFromOptions(
-        vision,
-        {
-            baseOptions: {
-                modelAssetPath:
-                    "https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task"
-            },
+    handLandmarker =
+        await HandLandmarker.createFromOptions(
+            vision,
+            {
+                baseOptions: {
+                    modelAssetPath:
+                        "https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task"
+                },
 
-            runningMode: "VIDEO",
-            numHands: 2
-        }
-    );
+                runningMode: "VIDEO",
+
+                numHands: 2
+            }
+        );
 
     status.textContent = "Handherkenning klaar!";
 }
 
 
-/* =========================
-   CAMERA STARTEN
-========================= */
+// ================================
+// CAMERA STARTEN
+// ================================
 
-startCameraButton.addEventListener("click", async () => {
+startCameraButton.addEventListener(
+    "click",
+    async () => {
 
-    try {
+        try {
 
-        status.textContent = "Camera wordt gestart...";
+            status.textContent =
+                "Camera wordt gestart...";
 
-        stream = await navigator.mediaDevices.getUserMedia({
-            video: true,
-            audio: false
-        });
+            stream =
+                await navigator.mediaDevices.getUserMedia({
+                    video: true,
+                    audio: false
+                });
 
-        camera.srcObject = stream;
+            camera.srcObject = stream;
 
-        await camera.play();
+            await camera.play();
 
-        overlay.width = camera.videoWidth;
-        overlay.height = camera.videoHeight;
+            overlay.width =
+                camera.videoWidth;
 
-        startCameraButton.disabled = true;
-        restartButton.disabled = false;
+            overlay.height =
+                camera.videoHeight;
 
-        await loadHandTracking();
+            startCameraButton.disabled = true;
 
-        detecting = true;
+            restartButton.disabled = false;
 
-        status.textContent =
-            "Pose 1: zet beide handen op de groene bolletjes.";
+            await loadHandTracking();
 
-        detectHands();
+            detecting = true;
 
-    } catch (error) {
+            currentPose = 1;
 
-        console.error(error);
+            updatePoseText();
 
-        status.textContent =
-            "Fout: " + error.message;
+            detectHands();
+
+        } catch (error) {
+
+            console.error(error);
+
+            status.textContent =
+                "Fout: " + error.message;
+        }
     }
-});
+);
 
 
-/* =========================
-   HANDEN DETECTEREN
-========================= */
+// ================================
+// HANDEN DETECTEREN
+// ================================
 
 function detectHands() {
 
-    if (!detecting) {
-        return;
-    }
+    if (!detecting) return;
 
-    if (handLandmarker && camera.readyState >= 2) {
+    if (
+        handLandmarker &&
+        camera.readyState >= 2
+    ) {
 
         const results =
             handLandmarker.detectForVideo(
@@ -118,9 +136,45 @@ function detectHands() {
 }
 
 
-/* =========================
-   TEKENEN + POSE CONTROLEREN
-========================= */
+// ================================
+// TEKST AANPASSEN
+// ================================
+
+function updatePoseText() {
+
+    poseTitle.textContent =
+        "Pose " + currentPose;
+
+    progressText.textContent =
+        capturedFrames.length + " / 3";
+
+
+    if (currentPose === 1) {
+
+        status.textContent =
+            "Zet je vuisten op de groene bolletjes.";
+
+    }
+
+    if (currentPose === 2) {
+
+        status.textContent =
+            "Houd je handen plat naast je oren.";
+
+    }
+
+    if (currentPose === 3) {
+
+        status.textContent =
+            "Houd je handen plat naast je kin.";
+
+    }
+}
+
+
+// ================================
+// ALLES TEKENEN
+// ================================
 
 function drawEverything(results) {
 
@@ -132,16 +186,80 @@ function drawEverything(results) {
     );
 
 
-    const leftTarget = {
-        x: overlay.width * 0.35,
-        y: overlay.height * 0.35
-    };
+    // --------------------------------
+    // DOELPOSITIE PER POSE
+    // --------------------------------
 
-    const rightTarget = {
-        x: overlay.width * 0.65,
-        y: overlay.height * 0.35
-    };
+    let targets = [];
 
+
+    if (currentPose === 1) {
+
+        // Eén hand onder de kin
+        // Eén hand rond ooghoogte
+
+        targets = [
+
+            {
+                x: overlay.width * 0.42,
+                y: overlay.height * 0.58
+            },
+
+            {
+                x: overlay.width * 0.65,
+                y: overlay.height * 0.32
+            }
+
+        ];
+
+    }
+
+
+    if (currentPose === 2) {
+
+        // Handen naast de oren
+
+        targets = [
+
+            {
+                x: overlay.width * 0.28,
+                y: overlay.height * 0.35
+            },
+
+            {
+                x: overlay.width * 0.72,
+                y: overlay.height * 0.35
+            }
+
+        ];
+
+    }
+
+
+    if (currentPose === 3) {
+
+        // Handen naast de kin
+
+        targets = [
+
+            {
+                x: overlay.width * 0.38,
+                y: overlay.height * 0.65
+            },
+
+            {
+                x: overlay.width * 0.62,
+                y: overlay.height * 0.65
+            }
+
+        ];
+
+    }
+
+
+    // --------------------------------
+    // HANDEN OPSPOREN
+    // --------------------------------
 
     let hands = [];
 
@@ -151,41 +269,66 @@ function drawEverything(results) {
         results.landmarks.length > 0
     ) {
 
-        for (const hand of results.landmarks) {
+        for (
+            const hand of results.landmarks
+        ) {
 
             const palmPoints = [
+
                 hand[0],
                 hand[5],
                 hand[9],
                 hand[13],
                 hand[17]
+
             ];
+
 
             let averageX = 0;
             let averageY = 0;
 
-            for (const point of palmPoints) {
+
+            for (
+                const point of palmPoints
+            ) {
+
                 averageX += point.x;
                 averageY += point.y;
+
             }
 
-            averageX /= palmPoints.length;
-            averageY /= palmPoints.length;
+
+            averageX /=
+                palmPoints.length;
+
+            averageY /=
+                palmPoints.length;
 
 
             hands.push({
-                x: averageX * overlay.width,
-                y: averageY * overlay.height
+
+                x:
+                    averageX *
+                    overlay.width,
+
+                y:
+                    averageY *
+                    overlay.height
+
             });
+
         }
+
     }
 
 
-    /* =========================
-       HANDEN TEKENEN
-    ========================= */
+    // --------------------------------
+    // HANDPUNTEN TEKENEN
+    // --------------------------------
 
-    for (const hand of hands) {
+    for (
+        const hand of hands
+    ) {
 
         ctx.beginPath();
 
@@ -200,63 +343,86 @@ function drawEverything(results) {
         ctx.fillStyle = "#ff00ff";
 
         ctx.fill();
+
     }
 
 
-    /* =========================
-       DOELEN
-    ========================= */
+    // --------------------------------
+    // CONTROLEREN OF HANDEN GOED STAAN
+    // --------------------------------
 
-    let leftCorrect = false;
-    let rightCorrect = false;
+    let target1Correct = false;
+    let target2Correct = false;
+
 
     const detectionDistance = 90;
 
 
-    for (const hand of hands) {
+    for (
+        const hand of hands
+    ) {
 
-        const distanceLeft = Math.hypot(
-            hand.x - leftTarget.x,
-            hand.y - leftTarget.y
-        );
-
-        const distanceRight = Math.hypot(
-            hand.x - rightTarget.x,
-            hand.y - rightTarget.y
-        );
+        const distance1 =
+            Math.hypot(
+                hand.x - targets[0].x,
+                hand.y - targets[0].y
+            );
 
 
-        if (distanceLeft < detectionDistance) {
-            leftCorrect = true;
+        const distance2 =
+            Math.hypot(
+                hand.x - targets[1].x,
+                hand.y - targets[1].y
+            );
+
+
+        if (
+            distance1 <
+            detectionDistance
+        ) {
+
+            target1Correct = true;
+
         }
 
-        if (distanceRight < detectionDistance) {
-            rightCorrect = true;
+
+        if (
+            distance2 <
+            detectionDistance
+        ) {
+
+            target2Correct = true;
+
         }
+
     }
 
 
-    drawTarget(
-        leftTarget.x,
-        leftTarget.y,
-        leftCorrect
-    );
+    // --------------------------------
+    // GROENE BOLLETJES
+    // --------------------------------
 
     drawTarget(
-        rightTarget.x,
-        rightTarget.y,
-        rightCorrect
+        targets[0].x,
+        targets[0].y,
+        target1Correct
     );
 
 
-    /* =========================
-       POSE 1 VASTLEGGEN
-    ========================= */
+    drawTarget(
+        targets[1].x,
+        targets[1].y,
+        target2Correct
+    );
+
+
+    // --------------------------------
+    // AUTOMATISCH VASTLEGGEN
+    // --------------------------------
 
     if (
-        leftCorrect &&
-        rightCorrect &&
-        !pose1Captured &&
+        target1Correct &&
+        target2Correct &&
         hands.length >= 2
     ) {
 
@@ -265,64 +431,80 @@ function drawEverything(results) {
             status.textContent =
                 "🎯 Goed! Blijf even stil...";
 
-            captureTimer = setTimeout(() => {
 
-                capturePose1();
+            captureTimer =
+                setTimeout(
+                    () => {
 
-            }, 1000);
+                        captureCurrentPose();
+
+                    },
+                    1000
+                );
+
         }
 
-    } else if (
-        (!leftCorrect || !rightCorrect) &&
-        captureTimer !== null
-    ) {
+    } else {
 
-        clearTimeout(captureTimer);
+        if (
+            captureTimer !== null
+        ) {
 
-        captureTimer = null;
-    }
+            clearTimeout(
+                captureTimer
+            );
 
+            captureTimer = null;
 
-    /* =========================
-       NORMALE STATUS
-    ========================= */
-
-    if (!pose1Captured) {
-
-        if (leftCorrect && rightCorrect) {
-
-            status.textContent =
-                "🎯 Beide handen goed! Blijf stil...";
-
-        } else if (leftCorrect || rightCorrect) {
-
-            status.textContent =
-                "🟢 Eén hand staat goed.";
-
-        } else {
-
-            status.textContent =
-                "Zet beide handen op de groene bolletjes.";
         }
+
+
+        if (
+            currentPose === 1
+        ) {
+
+            status.textContent =
+                "Zet je vuisten op de groene bolletjes.";
+
+        }
+
+
+        if (
+            currentPose === 2
+        ) {
+
+            status.textContent =
+                "Houd je handen plat naast je oren.";
+
+        }
+
+
+        if (
+            currentPose === 3
+        ) {
+
+            status.textContent =
+                "Houd je handen plat naast je kin.";
+
+        }
+
     }
+
 }
 
 
-/* =========================
-   POSE 1 OPSLAAN
-========================= */
+// ================================
+// POSE OPSLAAN
+// ================================
 
-function capturePose1() {
-
-    pose1Captured = true;
+function captureCurrentPose() {
 
     captureTimer = null;
 
 
-    /* Maak een foto van het camerabeeld */
-
     const frameCanvas =
         document.createElement("canvas");
+
 
     frameCanvas.width =
         camera.videoWidth;
@@ -330,21 +512,22 @@ function capturePose1() {
     frameCanvas.height =
         camera.videoHeight;
 
+
     const frameCtx =
         frameCanvas.getContext("2d");
 
 
-    /*
-     * Omdat de camera gespiegeld wordt weergegeven,
-     * spiegelen we het opgeslagen frame ook.
-     */
-
+    // Camera spiegelen
     frameCtx.translate(
         frameCanvas.width,
         0
     );
 
-    frameCtx.scale(-1, 1);
+    frameCtx.scale(
+        -1,
+        1
+    );
+
 
     frameCtx.drawImage(
         camera,
@@ -355,28 +538,97 @@ function capturePose1() {
     );
 
 
-    console.log(
-        "Pose 1 opgeslagen!",
-        frameCanvas.toDataURL("image/png")
+    // Frame bewaren
+    capturedFrames.push(
+        frameCanvas
     );
 
 
+    console.log(
+        "Pose opgeslagen:",
+        currentPose
+    );
+
+
+    progressText.textContent =
+        capturedFrames.length + " / 3";
+
+
     status.textContent =
-        "📸 Pose 1 opgeslagen!";
+        "📸 Pose " +
+        currentPose +
+        " opgeslagen!";
 
 
-    /*
-     * Voorlopig stoppen we hier.
-     * Later gaat dit automatisch naar Pose 2.
-     */
+    // --------------------------------
+    // VOLGENDE POSE
+    // --------------------------------
+
+    if (currentPose < 3) {
+
+        currentPose++;
+
+        setTimeout(
+            () => {
+
+                updatePoseText();
+
+            },
+            700
+        );
+
+    } else {
+
+        finishPoses();
+
+    }
+
 }
 
 
-/* =========================
-   DOELBOLLETJE
-========================= */
+// ================================
+// ALLE POSES KLAAR
+// ================================
 
-function drawTarget(x, y, correct) {
+function finishPoses() {
+
+    detecting = false;
+
+
+    poseTitle.textContent =
+        "Klaar! ✨";
+
+
+    status.textContent =
+        "🎉 Alle 3 poses zijn opgeslagen!";
+
+
+    progressText.textContent =
+        "3 / 3";
+
+
+    document
+        .getElementById("animationSection")
+        .classList.remove("hidden");
+
+
+    console.log(
+        "Alle frames:",
+        capturedFrames
+    );
+
+}
+
+
+// ================================
+// GROENE DOELEN
+// ================================
+
+function drawTarget(
+    x,
+    y,
+    correct
+) {
 
     ctx.beginPath();
 
@@ -388,9 +640,12 @@ function drawTarget(x, y, correct) {
         Math.PI * 2
     );
 
-    ctx.fillStyle = correct
-        ? "rgba(0, 255, 120, 0.75)"
-        : "rgba(0, 255, 80, 0.35)";
+
+    ctx.fillStyle =
+        correct
+            ? "rgba(0, 255, 120, 0.75)"
+            : "rgba(0, 255, 80, 0.35)";
+
 
     ctx.fill();
 
@@ -405,55 +660,102 @@ function drawTarget(x, y, correct) {
         Math.PI * 2
     );
 
-    ctx.fillStyle = correct
-        ? "#ffffff"
-        : "#00ff55";
+
+    ctx.fillStyle =
+        correct
+            ? "#ffffff"
+            : "#00ff55";
+
 
     ctx.fill();
 
 
-    ctx.strokeStyle = "white";
+    ctx.strokeStyle =
+        "white";
+
     ctx.lineWidth = 3;
 
     ctx.stroke();
+
 }
 
 
-/* =========================
-   OPNIEUW
-========================= */
+// ================================
+// OPNIEUW
+// ================================
 
-restartButton.addEventListener("click", () => {
+restartButton.addEventListener(
+    "click",
+    () => {
 
-    detecting = false;
+        detecting = false;
 
-    if (captureTimer !== null) {
-        clearTimeout(captureTimer);
-        captureTimer = null;
+
+        if (
+            captureTimer !== null
+        ) {
+
+            clearTimeout(
+                captureTimer
+            );
+
+            captureTimer = null;
+
+        }
+
+
+        if (stream) {
+
+            stream
+                .getTracks()
+                .forEach(
+                    track =>
+                        track.stop()
+                );
+
+            stream = null;
+
+        }
+
+
+        camera.srcObject = null;
+
+
+        ctx.clearRect(
+            0,
+            0,
+            overlay.width,
+            overlay.height
+        );
+
+
+        capturedFrames = [];
+
+        currentPose = 1;
+
+
+        poseTitle.textContent =
+            "Pose 1";
+
+
+        progressText.textContent =
+            "0 / 3";
+
+
+        startCameraButton.disabled =
+            false;
+
+        restartButton.disabled =
+            true;
+
+
+        document
+            .getElementById("animationSection")
+            .classList.add("hidden");
+
+
+        status.textContent =
+            "Camera uit.";
+
     }
-
-    if (stream) {
-
-        stream.getTracks().forEach(track => {
-            track.stop();
-        });
-
-        stream = null;
-    }
-
-    camera.srcObject = null;
-
-    ctx.clearRect(
-        0,
-        0,
-        overlay.width,
-        overlay.height
-    );
-
-    pose1Captured = false;
-
-    startCameraButton.disabled = false;
-    restartButton.disabled = true;
-
-    status.textContent = "Camera uit.";
-});
+);
