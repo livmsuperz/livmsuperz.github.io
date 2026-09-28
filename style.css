@@ -331,10 +331,10 @@ h4{
 .binair-planeten {
     position: absolute;
 
-    right: -30px;
+    right: -150px;
     top: 40px;
 
-    width: 470px;
+    width: 550px;
     height: auto;
 
     z-index: 1;
