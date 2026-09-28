@@ -759,3 +759,372 @@ restartButton.addEventListener(
 
     }
 );
+// ========================================
+// ANIMATIE
+// ========================================
+
+const playAnimationButton =
+    document.getElementById("playAnimation");
+
+const animationCanvas =
+    document.getElementById("animationCanvas");
+
+const animationCtx =
+    animationCanvas.getContext("2d");
+
+const music =
+    document.getElementById("music");
+
+let animationRunning = false;
+
+
+// ========================================
+// KNOP "ANIMATIE AFSPELEN"
+// ========================================
+
+playAnimationButton.addEventListener(
+    "click",
+    () => {
+
+        if (capturedFrames.length < 3) {
+
+            console.log(
+                "Nog niet alle poses zijn opgeslagen."
+            );
+
+            return;
+        }
+
+        if (animationRunning) {
+            return;
+        }
+
+        animationRunning = true;
+
+        playAnimationButton.disabled = true;
+
+        playAnimationButton.textContent =
+            "⏳ Animatie speelt...";
+
+        startAnimation();
+
+    }
+);
+
+
+// ========================================
+// ANIMATIE STARTEN
+// ========================================
+
+function startAnimation() {
+
+    animationCanvas.width =
+        700;
+
+    animationCanvas.height =
+        500;
+
+
+    // Muziek starten
+    if (music) {
+
+        music.currentTime = 0;
+
+        music.play().catch(error => {
+
+            console.log(
+                "Muziek kon niet automatisch starten:",
+                error
+            );
+
+        });
+
+    }
+
+
+    let frame = 0;
+
+    const totalFrames = 60;
+
+
+    function animate() {
+
+        animationCtx.clearRect(
+            0,
+            0,
+            animationCanvas.width,
+            animationCanvas.height
+        );
+
+
+        // Achtergrond
+        drawAnimationBackground();
+
+
+        // Welke pose?
+        const poseIndex =
+            Math.floor(
+                frame / 20
+            ) % 3;
+
+
+        const pose =
+            capturedFrames[poseIndex];
+
+
+        // Beweging links -> rechts -> links
+        const movement =
+            Math.sin(
+                frame * 0.08
+            ) * 100;
+
+
+        // Afbeelding tekenen
+        animationCtx.save();
+
+
+        animationCtx.translate(
+            animationCanvas.width / 2 +
+            movement,
+            250
+        );
+
+
+        animationCtx.drawImage(
+            pose,
+            -250,
+            -188,
+            500,
+            375
+        );
+
+
+        animationCtx.restore();
+
+
+        // Hartjes
+        drawAnimationHearts(frame);
+
+
+        frame++;
+
+
+        if (frame < totalFrames) {
+
+            requestAnimationFrame(
+                animate
+            );
+
+        } else {
+
+            animationRunning = false;
+
+            playAnimationButton.disabled =
+                false;
+
+            playAnimationButton.textContent =
+                "▶ Animatie opnieuw afspelen";
+
+        }
+
+    }
+
+
+    animate();
+
+}
+
+
+// ========================================
+// ACHTERGROND
+// ========================================
+
+function drawAnimationBackground() {
+
+    const gradient =
+        animationCtx.createRadialGradient(
+            350,
+            250,
+            50,
+            350,
+            250,
+            500
+        );
+
+
+    gradient.addColorStop(
+        0,
+        "#402060"
+    );
+
+    gradient.addColorStop(
+        1,
+        "#090014"
+    );
+
+
+    animationCtx.fillStyle =
+        gradient;
+
+    animationCtx.fillRect(
+        0,
+        0,
+        700,
+        500
+    );
+
+
+    // Sterren
+    animationCtx.fillStyle =
+        "white";
+
+
+    for (
+        let i = 0;
+        i < 50;
+        i++
+    ) {
+
+        const x =
+            (i * 97) % 700;
+
+        const y =
+            (i * 53) % 500;
+
+
+        animationCtx.beginPath();
+
+        animationCtx.arc(
+            x,
+            y,
+            1.5,
+            0,
+            Math.PI * 2
+        );
+
+        animationCtx.fill();
+
+    }
+
+}
+
+
+// ========================================
+// HARTJES
+// ========================================
+
+function drawAnimationHearts(frame) {
+
+    const hearts = [
+
+        {
+            x: 100,
+            y: 100
+        },
+
+        {
+            x: 600,
+            y: 120
+        },
+
+        {
+            x: 130,
+            y: 380
+        },
+
+        {
+            x: 570,
+            y: 390
+        },
+
+        {
+            x: 350,
+            y: 70
+        }
+
+    ];
+
+
+    for (
+        let i = 0;
+        i < hearts.length;
+        i++
+    ) {
+
+        const heart =
+            hearts[i];
+
+
+        const movement =
+            Math.sin(
+                frame * 0.05 + i
+            ) * 15;
+
+
+        drawHeart(
+            heart.x,
+            heart.y + movement,
+            15
+        );
+
+    }
+
+}
+
+
+// ========================================
+// HART TEKENEN
+// ========================================
+
+function drawHeart(
+    x,
+    y,
+    size
+) {
+
+    animationCtx.save();
+
+    animationCtx.translate(
+        x,
+        y
+    );
+
+
+    animationCtx.fillStyle =
+        "#ff5cba";
+
+
+    animationCtx.beginPath();
+
+
+    animationCtx.moveTo(
+        0,
+        size * 0.8
+    );
+
+
+    animationCtx.bezierCurveTo(
+        -size * 1.5,
+        -size * 0.2,
+        -size * 0.8,
+        -size * 1.3,
+        0,
+        -size * 0.5
+    );
+
+
+    animationCtx.bezierCurveTo(
+        size * 0.8,
+        -size * 1.3,
+        size * 1.5,
+        -size * 0.2,
+        0,
+        size * 0.8
+    );
+
+
+    animationCtx.fill();
+
+    animationCtx.restore();
+
+}
