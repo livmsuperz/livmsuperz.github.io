@@ -262,3 +262,153 @@ h4{
 
    margin-bottom: 15px;
 }
+/* =========================
+   BINAIRE PAGINA
+   ========================= */
+
+.binair-pagina {
+    min-height: 100vh;
+    background-image: url("background.jpeg");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+/* Pagina zelf */
+.binair-page {
+    width: 1050px;
+    max-width: 90%;
+    margin: 0 auto;
+    padding-top: 120px;
+    padding-bottom: 80px;
+}
+
+/* Titel */
+.binair-page > h1 {
+    text-align: center;
+    color: white;
+    font-size: 38px;
+    font-weight: normal;
+    margin-bottom: 60px;
+}
+
+/* Gebied met afbeelding + tekst */
+.binair-content {
+    position: relative;
+    min-height: 650px;
+    width: 100%;
+}
+
+/* Planten links */
+.planten {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 470px;
+    height: auto;
+    z-index: 1;
+}
+
+/* Tekstblok dat over de afbeelding heen ligt */
+.binair-tekst {
+    position: absolute;
+    left: 300px;
+    top: 100px;
+
+    width: 600px;
+    padding: 35px 45px;
+
+    background: rgba(245, 241, 231, 0.88);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    border-radius: 12px;
+
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+
+    z-index: 2;
+}
+
+.binair-tekst h2 {
+    text-align: center;
+    font-size: 27px;
+    font-weight: normal;
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+.binair-tekst p {
+    text-align: center;
+    font-size: 17px;
+    line-height: 1.6;
+    margin-bottom: 25px;
+}
+
+/* Voorbeeldblok */
+.binair-example {
+    width: 600px;
+    max-width: 100%;
+    margin: 20px auto 0;
+
+    padding: 30px 40px;
+
+    background: rgba(245, 241, 231, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    border-radius: 12px;
+
+    text-align: center;
+}
+
+.binair-example h2 {
+    font-weight: normal;
+    margin-top: 0;
+}
+
+.binair-example p {
+    font-size: 17px;
+    line-height: 1.6;
+}
+
+/* Home-knop */
+.binair-pagina .back-home {
+    text-align: center;
+    margin-top: 50px;
+}
+
+.binair-pagina .back-home a {
+    display: inline-block;
+    padding: 12px 25px;
+
+    color: white;
+    background: rgba(30, 25, 22, 0.8);
+
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 8px;
+
+    text-decoration: none;
+    font-size: 17px;
+}
+
+/* Mobiel */
+@media (max-width: 850px) {
+
+    .binair-content {
+        min-height: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .planten {
+        position: relative;
+        width: 70%;
+        left: auto;
+        top: auto;
+    }
+
+    .binair-tekst {
+        position: relative;
+        left: auto;
+        top: auto;
+        width: 90%;
+        margin-top: -100px;
+    }
+}
