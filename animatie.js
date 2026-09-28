@@ -17,7 +17,9 @@ let handLandmarker = null;
 let detecting = false;
 
 
-/* HANDHERKENNING LADEN */
+/* =========================
+   HANDHERKENNING
+========================= */
 
 async function loadHandTracking() {
 
@@ -44,7 +46,9 @@ async function loadHandTracking() {
 }
 
 
-/* CAMERA */
+/* =========================
+   CAMERA STARTEN
+========================= */
 
 startCameraButton.addEventListener("click", async () => {
 
@@ -83,7 +87,9 @@ startCameraButton.addEventListener("click", async () => {
 });
 
 
-/* HANDEN DETECTEREN */
+/* =========================
+   HANDEN DETECTEREN
+========================= */
 
 function detectHands() {
 
@@ -91,10 +97,7 @@ function detectHands() {
         return;
     }
 
-    if (
-        handLandmarker &&
-        camera.readyState >= 2
-    ) {
+    if (handLandmarker && camera.readyState >= 2) {
 
         const results =
             handLandmarker.detectForVideo(
@@ -109,7 +112,9 @@ function detectHands() {
 }
 
 
-/* ALLES TEKENEN */
+/* =========================
+   TEKENEN + CONTROLEREN
+========================= */
 
 function drawEverything(results) {
 
@@ -121,67 +126,173 @@ function drawEverything(results) {
     );
 
 
-    /* VASTE DOELBOLLETJES */
+    /* De twee doelen */
+
+    const leftTarget = {
+        x: overlay.width * 0.35,
+        y: overlay.height * 0.35
+    };
+
+    const rightTarget = {
+        x: overlay.width * 0.65,
+        y: overlay.height * 0.35
+    };
+
+
+    let leftCorrect = false;
+    let rightCorrect = false;
+
+
+    /* Doelbolletjes tekenen */
 
     drawTarget(
-        overlay.width * 0.35,
-        overlay.height * 0.35
+        leftTarget.x,
+        leftTarget.y,
+        false
     );
 
     drawTarget(
-        overlay.width * 0.65,
-        overlay.height * 0.35
+        rightTarget.x,
+        rightTarget.y,
+        false
     );
 
 
-    /* HANDEN */
+    /* Handen */
 
     if (
         results.landmarks &&
         results.landmarks.length > 0
     ) {
 
-        status.textContent =
-            "👋 Hand gevonden!";
-
         for (const hand of results.landmarks) {
 
-            for (const point of hand) {
+            /*
+             * Landmark 0 = pols.
+             * We gebruiken het midden van de hand
+             * door enkele belangrijke punten te middelen.
+             */
 
-                const x =
-                    point.x * overlay.width;
+            const palmPoints = [
+                hand[0],
+                hand[5],
+                hand[9],
+                hand[13],
+                hand[17]
+            ];
 
-                const y =
-                    point.y * overlay.height;
+            let averageX = 0;
+            let averageY = 0;
+
+            for (const point of palmPoints) {
+                averageX += point.x;
+                averageY += point.y;
+            }
+
+            averageX /= palmPoints.length;
+            averageY /= palmPoints.length;
 
 
-                ctx.beginPath();
+            const handX =
+                averageX * overlay.width;
 
-                ctx.arc(
-                    x,
-                    y,
-                    7,
-                    0,
-                    Math.PI * 2
+            const handY =
+                averageY * overlay.height;
+
+
+            /* Handpunt tekenen */
+
+            ctx.beginPath();
+
+            ctx.arc(
+                handX,
+                handY,
+                12,
+                0,
+                Math.PI * 2
+            );
+
+            ctx.fillStyle = "#ff00ff";
+            ctx.fill();
+
+
+            /* Afstand tot linker doel */
+
+            const distanceLeft =
+                Math.hypot(
+                    handX - leftTarget.x,
+                    handY - leftTarget.y
                 );
 
-                ctx.fillStyle = "#ff00ff";
 
-                ctx.fill();
+            /* Afstand tot rechter doel */
+
+            const distanceRight =
+                Math.hypot(
+                    handX - rightTarget.x,
+                    handY - rightTarget.y
+                );
+
+
+            /*
+             * Als de hand dichtbij genoeg is,
+             * is het doel geraakt.
+             */
+
+            const detectionDistance = 90;
+
+
+            if (distanceLeft < detectionDistance) {
+                leftCorrect = true;
+            }
+
+            if (distanceRight < detectionDistance) {
+                rightCorrect = true;
             }
         }
+    }
+
+
+    /* Doelen opnieuw tekenen met juiste status */
+
+    drawTarget(
+        leftTarget.x,
+        leftTarget.y,
+        leftCorrect
+    );
+
+    drawTarget(
+        rightTarget.x,
+        rightTarget.y,
+        rightCorrect
+    );
+
+
+    /* Status */
+
+    if (leftCorrect && rightCorrect) {
+
+        status.textContent =
+            "🎯 Beide handen staan goed!";
+
+    } else if (leftCorrect || rightCorrect) {
+
+        status.textContent =
+            "🟢 Eén hand staat goed!";
 
     } else {
 
         status.textContent =
-            "Steek je handen in beeld.";
+            "Zet je handen op de groene bolletjes.";
     }
 }
 
 
-/* DOELBOLLETJE */
+/* =========================
+   DOELBOLLETJE
+========================= */
 
-function drawTarget(x, y) {
+function drawTarget(x, y, correct) {
 
     ctx.beginPath();
 
@@ -193,8 +304,9 @@ function drawTarget(x, y) {
         Math.PI * 2
     );
 
-    ctx.fillStyle =
-        "rgba(0, 255, 80, 0.35)";
+    ctx.fillStyle = correct
+        ? "rgba(0, 255, 120, 0.75)"
+        : "rgba(0, 255, 80, 0.35)";
 
     ctx.fill();
 
@@ -209,19 +321,23 @@ function drawTarget(x, y) {
         Math.PI * 2
     );
 
-    ctx.fillStyle =
-        "#00ff55";
+    ctx.fillStyle = correct
+        ? "#ffffff"
+        : "#00ff55";
 
     ctx.fill();
 
 
     ctx.strokeStyle = "white";
     ctx.lineWidth = 3;
+
     ctx.stroke();
 }
 
 
-/* OPNIEUW */
+/* =========================
+   OPNIEUW
+========================= */
 
 restartButton.addEventListener("click", () => {
 
