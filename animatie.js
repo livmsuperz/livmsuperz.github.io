@@ -16,9 +16,12 @@ let stream = null;
 let handLandmarker = null;
 let detecting = false;
 
+let pose1Captured = false;
+let captureTimer = null;
+
 
 /* =========================
-   HANDHERKENNING
+   HANDHERKENNING LADEN
 ========================= */
 
 async function loadHandTracking() {
@@ -75,6 +78,9 @@ startCameraButton.addEventListener("click", async () => {
 
         detecting = true;
 
+        status.textContent =
+            "Pose 1: zet beide handen op de groene bolletjes.";
+
         detectHands();
 
     } catch (error) {
@@ -113,7 +119,7 @@ function detectHands() {
 
 
 /* =========================
-   TEKENEN + CONTROLEREN
+   TEKENEN + POSE CONTROLEREN
 ========================= */
 
 function drawEverything(results) {
@@ -126,8 +132,6 @@ function drawEverything(results) {
     );
 
 
-    /* De twee doelen */
-
     const leftTarget = {
         x: overlay.width * 0.35,
         y: overlay.height * 0.35
@@ -139,26 +143,8 @@ function drawEverything(results) {
     };
 
 
-    let leftCorrect = false;
-    let rightCorrect = false;
+    let hands = [];
 
-
-    /* Doelbolletjes tekenen */
-
-    drawTarget(
-        leftTarget.x,
-        leftTarget.y,
-        false
-    );
-
-    drawTarget(
-        rightTarget.x,
-        rightTarget.y,
-        false
-    );
-
-
-    /* Handen */
 
     if (
         results.landmarks &&
@@ -166,12 +152,6 @@ function drawEverything(results) {
     ) {
 
         for (const hand of results.landmarks) {
-
-            /*
-             * Landmark 0 = pols.
-             * We gebruiken het midden van de hand
-             * door enkele belangrijke punten te middelen.
-             */
 
             const palmPoints = [
                 hand[0],
@@ -193,67 +173,68 @@ function drawEverything(results) {
             averageY /= palmPoints.length;
 
 
-            const handX =
-                averageX * overlay.width;
-
-            const handY =
-                averageY * overlay.height;
-
-
-            /* Handpunt tekenen */
-
-            ctx.beginPath();
-
-            ctx.arc(
-                handX,
-                handY,
-                12,
-                0,
-                Math.PI * 2
-            );
-
-            ctx.fillStyle = "#ff00ff";
-            ctx.fill();
-
-
-            /* Afstand tot linker doel */
-
-            const distanceLeft =
-                Math.hypot(
-                    handX - leftTarget.x,
-                    handY - leftTarget.y
-                );
-
-
-            /* Afstand tot rechter doel */
-
-            const distanceRight =
-                Math.hypot(
-                    handX - rightTarget.x,
-                    handY - rightTarget.y
-                );
-
-
-            /*
-             * Als de hand dichtbij genoeg is,
-             * is het doel geraakt.
-             */
-
-            const detectionDistance = 90;
-
-
-            if (distanceLeft < detectionDistance) {
-                leftCorrect = true;
-            }
-
-            if (distanceRight < detectionDistance) {
-                rightCorrect = true;
-            }
+            hands.push({
+                x: averageX * overlay.width,
+                y: averageY * overlay.height
+            });
         }
     }
 
 
-    /* Doelen opnieuw tekenen met juiste status */
+    /* =========================
+       HANDEN TEKENEN
+    ========================= */
+
+    for (const hand of hands) {
+
+        ctx.beginPath();
+
+        ctx.arc(
+            hand.x,
+            hand.y,
+            12,
+            0,
+            Math.PI * 2
+        );
+
+        ctx.fillStyle = "#ff00ff";
+
+        ctx.fill();
+    }
+
+
+    /* =========================
+       DOELEN
+    ========================= */
+
+    let leftCorrect = false;
+    let rightCorrect = false;
+
+    const detectionDistance = 90;
+
+
+    for (const hand of hands) {
+
+        const distanceLeft = Math.hypot(
+            hand.x - leftTarget.x,
+            hand.y - leftTarget.y
+        );
+
+        const distanceRight = Math.hypot(
+            hand.x - rightTarget.x,
+            hand.y - rightTarget.y
+        );
+
+
+        if (distanceLeft < detectionDistance) {
+            leftCorrect = true;
+        }
+
+        if (distanceRight < detectionDistance) {
+            rightCorrect = true;
+        }
+    }
+
 
     drawTarget(
         leftTarget.x,
@@ -268,23 +249,126 @@ function drawEverything(results) {
     );
 
 
-    /* Status */
+    /* =========================
+       POSE 1 VASTLEGGEN
+    ========================= */
 
-    if (leftCorrect && rightCorrect) {
+    if (
+        leftCorrect &&
+        rightCorrect &&
+        !pose1Captured &&
+        hands.length >= 2
+    ) {
 
-        status.textContent =
-            "🎯 Beide handen staan goed!";
+        if (captureTimer === null) {
 
-    } else if (leftCorrect || rightCorrect) {
+            status.textContent =
+                "🎯 Goed! Blijf even stil...";
 
-        status.textContent =
-            "🟢 Eén hand staat goed!";
+            captureTimer = setTimeout(() => {
 
-    } else {
+                capturePose1();
 
-        status.textContent =
-            "Zet je handen op de groene bolletjes.";
+            }, 1000);
+        }
+
+    } else if (
+        (!leftCorrect || !rightCorrect) &&
+        captureTimer !== null
+    ) {
+
+        clearTimeout(captureTimer);
+
+        captureTimer = null;
     }
+
+
+    /* =========================
+       NORMALE STATUS
+    ========================= */
+
+    if (!pose1Captured) {
+
+        if (leftCorrect && rightCorrect) {
+
+            status.textContent =
+                "🎯 Beide handen goed! Blijf stil...";
+
+        } else if (leftCorrect || rightCorrect) {
+
+            status.textContent =
+                "🟢 Eén hand staat goed.";
+
+        } else {
+
+            status.textContent =
+                "Zet beide handen op de groene bolletjes.";
+        }
+    }
+}
+
+
+/* =========================
+   POSE 1 OPSLAAN
+========================= */
+
+function capturePose1() {
+
+    pose1Captured = true;
+
+    captureTimer = null;
+
+
+    /* Maak een foto van het camerabeeld */
+
+    const frameCanvas =
+        document.createElement("canvas");
+
+    frameCanvas.width =
+        camera.videoWidth;
+
+    frameCanvas.height =
+        camera.videoHeight;
+
+    const frameCtx =
+        frameCanvas.getContext("2d");
+
+
+    /*
+     * Omdat de camera gespiegeld wordt weergegeven,
+     * spiegelen we het opgeslagen frame ook.
+     */
+
+    frameCtx.translate(
+        frameCanvas.width,
+        0
+    );
+
+    frameCtx.scale(-1, 1);
+
+    frameCtx.drawImage(
+        camera,
+        0,
+        0,
+        frameCanvas.width,
+        frameCanvas.height
+    );
+
+
+    console.log(
+        "Pose 1 opgeslagen!",
+        frameCanvas.toDataURL("image/png")
+    );
+
+
+    status.textContent =
+        "📸 Pose 1 opgeslagen!";
+
+
+    /*
+     * Voorlopig stoppen we hier.
+     * Later gaat dit automatisch naar Pose 2.
+     */
 }
 
 
@@ -343,6 +427,11 @@ restartButton.addEventListener("click", () => {
 
     detecting = false;
 
+    if (captureTimer !== null) {
+        clearTimeout(captureTimer);
+        captureTimer = null;
+    }
+
     if (stream) {
 
         stream.getTracks().forEach(track => {
@@ -360,6 +449,8 @@ restartButton.addEventListener("click", () => {
         overlay.width,
         overlay.height
     );
+
+    pose1Captured = false;
 
     startCameraButton.disabled = false;
     restartButton.disabled = true;
