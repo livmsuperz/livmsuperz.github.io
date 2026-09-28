@@ -262,12 +262,14 @@ h4{
 
    margin-bottom: 15px;
 }
-/* =================================
+/* =========================================
    BINAIRE STELSEL PAGINA
-   ================================= */
+   ========================================= */
 
-.binair-pagina {
+.binair-page {
+
     background-image: url("stars.jpeg");
+
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -276,14 +278,17 @@ h4{
     min-height: 100vh;
 
     font-family: Georgia, serif;
+
+    overflow-x: hidden;
 }
 
 
-/* =================================
+/* =========================================
    TITEL
-   ================================= */
+   ========================================= */
 
-.binair-welcome {
+.binair-title {
+
     position: absolute;
 
     top: 105px;
@@ -294,21 +299,21 @@ h4{
     color: rgb(220, 232, 241);
 
     font-size: 40px;
-    font-weight: bold;
 
     text-align: center;
 
     white-space: nowrap;
 
-    z-index: 2;
+    z-index: 5;
 }
 
 
-/* =================================
-   PLANETEN + TEKST
-   ================================= */
+/* =========================================
+   GEBIED VOOR PLANETEN + BLOK
+   ========================================= */
 
-.binair-container {
+.binair-area {
+
     position: relative;
 
     width: 1100px;
@@ -318,21 +323,23 @@ h4{
 
     margin: 0 auto;
 
-    top: 190px;
+    padding-top: 180px;
 }
 
 
-/* =================================
-   PLANETEN PNG
-   ================================= */
+/* =========================================
+   PLANETEN
+   ========================================= */
 
-.planeten {
+.binair-planeten {
+
     position: absolute;
 
-    right: -40px;
-    top: -50px;
+    right: -80px;
+    top: 150px;
 
-    width: 500px;
+    width: 550px;
+
     height: auto;
 
     z-index: 1;
@@ -340,24 +347,27 @@ h4{
     border: none;
     outline: none;
     box-shadow: none;
+
+    pointer-events: none;
 }
 
 
-/* =================================
+/* =========================================
    TEKSTBLOK
-   ================================= */
+   ========================================= */
 
-.binair-tekst {
+.binair-block {
+
     position: absolute;
 
     left: 100px;
-    top: 80px;
+    top: 220px;
 
-    width: 600px;
+    width: 570px;
 
-    padding: 30px;
+    padding: 30px 35px;
 
-    background-color: rgba(40, 13, 75, 0.92);
+    background-color: rgba(40, 13, 75, 0.94);
 
     color: white;
 
@@ -373,24 +383,30 @@ h4{
 
 /* Hover-effect */
 
-.binair-tekst:hover {
-    transform: scale(1.03);
+.binair-block:hover {
+
+    transform: scale(1.04);
 
     outline: 3px solid white;
+
     outline-offset: 8px;
 
-    box-shadow: 0 0 25px rgba(255, 255, 255, 0.3);
+    box-shadow:
+        0 0 25px rgba(255, 255, 255, 0.3);
 }
 
 
-/* Titel in blok */
+/* Titel van het blok */
 
-.binair-tekst h2 {
+.binair-block h2 {
+
     color: white;
 
     font-size: 30px;
 
     padding: 0;
+
+    margin-top: 0;
 
     margin-bottom: 20px;
 }
@@ -398,7 +414,8 @@ h4{
 
 /* Tekst */
 
-.binair-tekst p {
+.binair-block p {
+
     color: white;
 
     font-size: 17px;
@@ -409,21 +426,21 @@ h4{
 }
 
 
-/* =================================
-   VOORBEELD BLOK
-   ================================= */
+/* =========================================
+   VOORBEELD
+   ========================================= */
 
-.binair-voorbeeld {
-    position: relative;
+.binair-example {
 
-    width: 600px;
+    width: 570px;
+
     max-width: 90%;
 
-    margin: 250px auto 0;
+    margin: 0 auto;
 
-    padding: 30px;
+    padding: 25px 35px;
 
-    background-color: rgba(40, 13, 75, 0.92);
+    background-color: rgba(40, 13, 75, 0.94);
 
     color: white;
 
@@ -433,18 +450,20 @@ h4{
 }
 
 
-.binair-voorbeeld h2 {
+.binair-example h2 {
+
     color: white;
 
-    font-size: 30px;
+    font-size: 28px;
 
     padding: 0;
 
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
 
-.binair-voorbeeld p {
+.binair-example p {
+
     color: white;
 
     font-size: 17px;
@@ -453,27 +472,29 @@ h4{
 }
 
 
-/* =================================
+/* =========================================
    HOME KNOP
-   ================================= */
+   ========================================= */
 
-.binair-home {
+.binair-back {
+
     text-align: center;
 
     margin-top: 40px;
 
-    padding-bottom: 60px;
+    padding-bottom: 50px;
 }
 
 
-.binair-home a {
+.binair-back a {
+
     display: inline-block;
 
     padding: 12px 25px;
 
-    color: white;
-
     background-color: #280d4b;
+
+    color: white;
 
     border: 1px solid white;
 
@@ -481,24 +502,29 @@ h4{
 
     text-decoration: none;
 
+    font-size: 17px;
+
     transition: 0.3s ease;
 }
 
 
-.binair-home a:hover {
+.binair-back a:hover {
+
     transform: scale(1.05);
 
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+    box-shadow:
+        0 0 20px rgba(255, 255, 255, 0.3);
 }
 
 
-/* =================================
-   MOBIELE VERSIE
-   ================================= */
+/* =========================================
+   KLEINER SCHERM
+   ========================================= */
 
 @media (max-width: 850px) {
 
-    .binair-welcome {
+    .binair-title {
+
         position: relative;
 
         top: 100px;
@@ -509,10 +535,13 @@ h4{
     }
 
 
-    .binair-container {
-        top: 130px;
+    .binair-area {
 
         height: auto;
+
+        margin-top: 120px;
+
+        padding-top: 0;
 
         display: flex;
 
@@ -522,7 +551,8 @@ h4{
     }
 
 
-    .planeten {
+    .binair-planeten {
+
         position: relative;
 
         right: auto;
@@ -530,14 +560,16 @@ h4{
 
         width: 80%;
 
-        margin-left: auto;
+        margin-left: 20%;
+
         margin-bottom: -100px;
 
         z-index: 1;
     }
 
 
-    .binair-tekst {
+    .binair-block {
+
         position: relative;
 
         left: auto;
@@ -549,7 +581,8 @@ h4{
     }
 
 
-    .binair-voorbeeld {
-        margin-top: 180px;
+    .binair-example {
+
+        margin-top: 100px;
     }
 }
