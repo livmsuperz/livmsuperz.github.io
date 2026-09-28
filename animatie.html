@@ -10,7 +10,15 @@
     <link rel="stylesheet" href="animatie.css">
 
     <!-- MediaPipe -->
-    <script type="module" src="animatie.js"></script>
+    <script type="module">
+    import {
+        HandLandmarker,
+        FilesetResolver
+    } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision/vision_bundle.mjs";
+
+    window.HandLandmarker = HandLandmarker;
+    window.FilesetResolver = FilesetResolver;
+</script>
 </head>
 
 <body>
