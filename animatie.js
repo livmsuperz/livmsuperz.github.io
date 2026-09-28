@@ -821,25 +821,44 @@ function startAnimation() {
     animationCanvas.width = 700;
     animationCanvas.height = 500;
 
+    // Controle
+    console.log("Aantal opgeslagen frames:", capturedFrames.length);
+
+    if (capturedFrames.length < 3) {
+        console.log("Niet genoeg frames!");
+        animationRunning = false;
+        playAnimationButton.disabled = false;
+        return;
+    }
+
+    // Muziek
     if (music) {
         music.currentTime = 0;
 
         music.play().catch(error => {
-            console.log("Muziek kon niet starten:", error);
+            console.log("Muziek fout:", error);
         });
     }
 
-    const totalDuration = 12000; // 12 seconden
-    const startTime = performance.now();
+    let startTime = null;
+
+    const duration = 12000;
+
 
     function animate(timestamp) {
 
-        const elapsed = timestamp - startTime;
-        const progress = Math.min(
-            elapsed / totalDuration,
-            1
-        );
+        if (!startTime) {
+            startTime = timestamp;
+        }
 
+        const elapsed =
+            timestamp - startTime;
+
+        const progress =
+            Math.min(elapsed / duration, 1);
+
+
+        // Canvas leegmaken
         animationCtx.clearRect(
             0,
             0,
@@ -847,121 +866,104 @@ function startAnimation() {
             animationCanvas.height
         );
 
+
+        // Achtergrond
         drawAnimationBackground();
 
-        /*
-         * --------------------------------
-         * 1. BEWEGING LINKS -> RECHTS
-         * --------------------------------
-         */
 
-        const sideMovement =
-            Math.sin(progress * Math.PI * 4) * 100;
-
-
-        /*
-         * --------------------------------
-         * 2. BEPALEN WELKE POSE
-         * --------------------------------
-         */
+        // ==================================
+        // POSE KIEZEN
+        // ==================================
 
         let poseIndex;
 
         if (progress < 0.40) {
 
-            // Pose 1 = vuisten
             poseIndex = 0;
 
         } else if (progress < 0.75) {
 
-            // Pose 2 = platte handen
             poseIndex = 1;
 
         } else {
 
-            // Pose 3 = handen bij kin
             poseIndex = 2;
 
         }
 
 
-        /*
-         * --------------------------------
-         * 3. OP EN NEER BEWEGING
-         * --------------------------------
-         */
+        const pose =
+            capturedFrames[poseIndex];
+
+
+        // ==================================
+        // LINKS / RECHTS BEWEGING
+        // ==================================
+
+        const sideMovement =
+            Math.sin(
+                progress * Math.PI * 4
+            ) * 80;
+
+
+        // ==================================
+        // OP / NEER BEWEGING
+        // ==================================
 
         let verticalMovement = 0;
 
 
         if (poseIndex === 0) {
 
-            // Vuisten 4 keer omhoog/omlaag
-
-            const poseProgress =
+            // 4 keer op en neer
+            const p =
                 progress / 0.40;
 
             verticalMovement =
                 Math.sin(
-                    poseProgress *
-                    Math.PI *
-                    8
-                ) * 35;
+                    p * Math.PI * 8
+                ) * 30;
 
         }
 
 
         if (poseIndex === 1) {
 
-            // Platte handen 4 keer omhoog/omlaag
-
-            const poseProgress =
+            // 4 keer op en neer
+            const p =
                 (progress - 0.40) / 0.35;
 
             verticalMovement =
                 Math.sin(
-                    poseProgress *
-                    Math.PI *
-                    8
-                ) * 40;
+                    p * Math.PI * 8
+                ) * 30;
 
         }
 
 
         if (poseIndex === 2) {
 
-            // Kleine beweging bij Pose 3
-
-            const poseProgress =
+            const p =
                 (progress - 0.75) / 0.25;
 
             verticalMovement =
                 Math.sin(
-                    poseProgress *
-                    Math.PI *
-                    2
+                    p * Math.PI * 2
                 ) * 15;
 
         }
 
 
-        /*
-         * --------------------------------
-         * 4. PERSOON TEKENEN
-         * --------------------------------
-         */
-
-        const pose =
-            capturedFrames[poseIndex];
-
+        // ==================================
+        // FOTO TEKENEN
+        // ==================================
 
         if (pose) {
 
             animationCtx.save();
 
             animationCtx.translate(
-                animationCanvas.width / 2 +
-                sideMovement,
+                350 + sideMovement,
                 250 + verticalMovement
             );
 
@@ -980,22 +982,18 @@ function startAnimation() {
         }
 
 
-        /*
-         * --------------------------------
-         * 5. HARTJES
-         * --------------------------------
-         */
+        // ==================================
+        // HARTJES
+        // ==================================
 
         drawAnimationHearts(
             elapsed / 100
         );
 
 
-        /*
-         * --------------------------------
-         * 6. VOLGENDE FRAME
-         * --------------------------------
-         */
+        // ==================================
+        // VOLGENDE FRAME
+        // ==================================
 
         if (progress < 1) {
 
@@ -1018,6 +1016,7 @@ function startAnimation() {
     }
 
 
+    // Animatie starten
     requestAnimationFrame(
         animate
     );
