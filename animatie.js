@@ -818,26 +818,40 @@ playAnimationButton.addEventListener(
 
 function startAnimation() {
 
+    console.log("ANIMATIE START!");
+
     animationCanvas.width = 700;
     animationCanvas.height = 500;
 
-    // Controle
-    console.log("Aantal opgeslagen frames:", capturedFrames.length);
+    animationCanvas.style.display = "block";
 
     if (capturedFrames.length < 3) {
-        console.log("Niet genoeg frames!");
-        animationRunning = false;
-        playAnimationButton.disabled = false;
+
+        console.log(
+            "Te weinig frames:",
+            capturedFrames.length
+        );
+
         return;
     }
 
+    console.log(
+        "Frames gevonden:",
+        capturedFrames.length
+    );
+
     // Muziek
     if (music) {
+
         music.currentTime = 0;
 
         music.play().catch(error => {
-            console.log("Muziek fout:", error);
+            console.log(
+                "Muziek kon niet starten:",
+                error
+            );
         });
+
     }
 
     let startTime = null;
@@ -847,7 +861,7 @@ function startAnimation() {
 
     function animate(timestamp) {
 
-        if (!startTime) {
+        if (startTime === null) {
             startTime = timestamp;
         }
 
@@ -855,25 +869,64 @@ function startAnimation() {
             timestamp - startTime;
 
         const progress =
-            Math.min(elapsed / duration, 1);
+            Math.min(
+                elapsed / duration,
+                1
+            );
 
 
-        // Canvas leegmaken
-        animationCtx.clearRect(
+        // =================================
+        // ACHTERGROND
+        // =================================
+
+        animationCtx.fillStyle =
+            "#090014";
+
+        animationCtx.fillRect(
             0,
             0,
-            animationCanvas.width,
-            animationCanvas.height
+            700,
+            500
         );
 
 
-        // Achtergrond
-        drawAnimationBackground();
+        // =================================
+        // STERREN
+        // =================================
+
+        animationCtx.fillStyle =
+            "white";
+
+        for (
+            let i = 0;
+            i < 60;
+            i++
+        ) {
+
+            const x =
+                (i * 83) % 700;
+
+            const y =
+                (i * 47) % 500;
+
+            animationCtx.beginPath();
+
+            animationCtx.arc(
+                x,
+                y,
+                2,
+                0,
+                Math.PI * 2
+            );
+
+            animationCtx.fill();
+
+        }
 
 
-        // ==================================
+        // =================================
         // POSE KIEZEN
-        // ==================================
+        // =================================
 
         let poseIndex;
 
@@ -896,32 +949,35 @@ function startAnimation() {
             capturedFrames[poseIndex];
 
 
-        // ==================================
-        // LINKS / RECHTS BEWEGING
-        // ==================================
+        // =================================
+        // LINKS / RECHTS
+        // =================================
 
         const sideMovement =
             Math.sin(
-                progress * Math.PI * 4
+                progress *
+                Math.PI *
+                4
             ) * 80;
 
 
-        // ==================================
-        // OP / NEER BEWEGING
-        // ==================================
+        // =================================
+        // OP / NEER
+        // =================================
 
         let verticalMovement = 0;
 
 
         if (poseIndex === 0) {
 
-            // 4 keer op en neer
             const p =
                 progress / 0.40;
 
             verticalMovement =
                 Math.sin(
-                    p * Math.PI * 8
+                    p *
+                    Math.PI *
+                    8
                 ) * 30;
 
         }
@@ -929,13 +985,15 @@ function startAnimation() {
 
         if (poseIndex === 1) {
 
-            // 4 keer op en neer
             const p =
-                (progress - 0.40) / 0.35;
+                (progress - 0.40) /
+                0.35;
 
             verticalMovement =
                 Math.sin(
-                    p * Math.PI * 8
+                    p *
+                    Math.PI *
+                    8
                 ) * 30;
 
         }
@@ -944,19 +1002,22 @@ function startAnimation() {
         if (poseIndex === 2) {
 
             const p =
-                (progress - 0.75) / 0.25;
+                (progress - 0.75) /
+                0.25;
 
             verticalMovement =
                 Math.sin(
-                    p * Math.PI * 2
+                    p *
+                    Math.PI *
+                    2
                 ) * 15;
 
         }
 
 
-        // ==================================
+        // =================================
         // FOTO TEKENEN
-        // ==================================
+        // =================================
 
         if (pose) {
 
@@ -967,7 +1028,6 @@ function startAnimation() {
                 250 + verticalMovement
             );
 
-
             animationCtx.drawImage(
                 pose,
                 -250,
@@ -976,24 +1036,41 @@ function startAnimation() {
                 375
             );
 
-
             animationCtx.restore();
+
+        } else {
+
+            // Dit zou nooit moeten gebeuren
+            animationCtx.fillStyle =
+                "white";
+
+            animationCtx.font =
+                "24px Arial";
+
+            animationCtx.textAlign =
+                "center";
+
+            animationCtx.fillText(
+                "Geen pose gevonden",
+                350,
+                250
+            );
 
         }
 
 
-        // ==================================
+        // =================================
         // HARTJES
-        // ==================================
+        // =================================
 
         drawAnimationHearts(
             elapsed / 100
         );
 
 
-        // ==================================
+        // =================================
         // VOLGENDE FRAME
-        // ==================================
+        // =================================
 
         if (progress < 1) {
 
@@ -1016,7 +1093,6 @@ function startAnimation() {
     }
 
 
-    // Animatie starten
     requestAnimationFrame(
         animate
     );
