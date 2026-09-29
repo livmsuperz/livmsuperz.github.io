@@ -840,67 +840,191 @@ restartButton.addEventListener(
 // ANIMATIE
 // ========================================
 
-if (playAnimationButton) {
+const playAnimationButton =
+    document.getElementById("playAnimation");
 
-    playAnimationButton.addEventListener(
-        "click",
-        () => {
+const animationCanvas =
+    document.getElementById("animationCanvas");
 
-            if (capturedFrames.length < 3) {
+const animationCtx =
+    animationCanvas.getContext("2d");
 
-                console.log(
-                    "Nog niet alle foto's zijn opgeslagen."
-                );
+const music =
+    document.getElementById("music");
 
-                return;
-            }
+let animationRunning = false;
 
-            if (animationRunning) {
-                return;
-            }
 
-            animationRunning = true;
+// ========================================
+// ANIMATIE AFSPELEN
+// ========================================
 
-            playAnimationButton.disabled = true;
+playAnimationButton.addEventListener(
+    "click",
+    () => {
 
-            playAnimationButton.textContent =
-                "⏳ Animatie speelt...";
+        if (capturedFrames.length < 3) {
 
-            startAnimation();
+            console.log(
+                "Nog niet alle 3 frames beschikbaar."
+            );
 
+            return;
         }
+
+        if (animationRunning) {
+            return;
+        }
+
+        animationRunning = true;
+
+        playAnimationButton.disabled = true;
+
+        playAnimationButton.textContent =
+            "⏳ Animatie speelt...";
+
+        startAnimation();
+
+    }
+);
+
+
+// ========================================
+// HART TEKENEN
+// ========================================
+
+function drawHeart(
+    x,
+    y,
+    size,
+    alpha = 1
+) {
+
+    animationCtx.save();
+
+    animationCtx.globalAlpha = alpha;
+
+    animationCtx.fillStyle = "#ff4fa3";
+
+    animationCtx.beginPath();
+
+    animationCtx.moveTo(
+        x,
+        y + size * 0.35
     );
 
+    animationCtx.bezierCurveTo(
+        x - size * 0.8,
+        y - size * 0.1,
+        x - size * 0.55,
+        y - size * 0.8,
+        x,
+        y - size * 0.35
+    );
+
+    animationCtx.bezierCurveTo(
+        x + size * 0.55,
+        y - size * 0.8,
+        x + size * 0.8,
+        y - size * 0.1,
+        x,
+        y + size * 0.35
+    );
+
+    animationCtx.fill();
+
+    animationCtx.restore();
 }
 
 
 // ========================================
-// ANIMATIE INSTELLINGEN
+// HARTJES ACHTERGROND
 // ========================================
 
-// Elke foto blijft 1,0 seconde zichtbaar.
-const photoDuration = 500;
+function drawHeartBackground() {
 
-// Frame 1 wordt 4 keer gespiegeld.
-const frame1Rounds = 4;
+    // Donkere roze achtergrond
+    animationCtx.fillStyle = "#180018";
 
-// Totale tijd van frame 1:
-// 8 stukken × 1,30 seconde
-const frame1Duration =
-    photoDuration * 8;
+    animationCtx.fillRect(
+        0,
+        0,
+        animationCanvas.width,
+        animationCanvas.height
+    );
 
-// Daarna laten we frame 2 en 3
-// steeds om en om zien.
-const frame23Rounds = 4;
 
-// 8 stukken × 1,30 seconde
-const frame23Duration =
-    photoDuration * 8;
+    // Kleine en grote hartjes
+    for (let i = 0; i < 35; i++) {
 
-// Totale animatieduur
-const animationDuration =
-    frame1Duration +
-    frame23Duration;
+        const x =
+            (i * 137 + 40) % 700;
+
+        const y =
+            (i * 83 + 30) % 500;
+
+        const size =
+            7 + ((i * 7) % 18);
+
+        const alpha =
+            0.20 + ((i % 4) * 0.10);
+
+        drawHeart(
+            x,
+            y,
+            size,
+            alpha
+        );
+
+    }
+}
+
+
+// ========================================
+// EXTRA HARTJES RONDOM HET FRAME
+// ========================================
+
+function drawAnimationHearts(time) {
+
+    const positions = [
+
+        [80, 80, 13],
+        [620, 70, 16],
+        [100, 420, 11],
+        [610, 420, 14],
+        [50, 250, 9],
+        [650, 250, 10],
+        [180, 50, 8],
+        [520, 450, 9]
+
+    ];
+
+    for (let i = 0; i < positions.length; i++) {
+
+        const baseX =
+            positions[i][0];
+
+        const baseY =
+            positions[i][1];
+
+        const size =
+            positions[i][2];
+
+        const movement =
+            Math.sin(
+                time / 20 + i
+            ) * 5;
+
+        drawHeart(
+            baseX,
+            baseY + movement,
+            size,
+            0.75
+        );
+
+    }
+
+}
 
 
 // ========================================
@@ -913,37 +1037,37 @@ function startAnimation() {
         "ANIMATIE START!"
     );
 
+    // Canvas grootte
+    animationCanvas.width = 700;
+    animationCanvas.height = 500;
 
-    if (
-        !animationCanvas ||
-        !animationCtx
-    ) {
+    animationCanvas.style.display =
+        "block";
 
-        console.error(
-            "animationCanvas ontbreekt."
+
+    // Controleren
+    if (capturedFrames.length < 3) {
+
+        console.log(
+            "Frames ontbreken:",
+            capturedFrames.length
         );
 
         animationRunning = false;
 
-        if (playAnimationButton) {
-
-            playAnimationButton.disabled =
-                false;
-
-        }
+        playAnimationButton.disabled =
+            false;
 
         return;
     }
 
 
-    animationCanvas.width = 700;
-    animationCanvas.height = 500;
+    console.log(
+        "3 frames gevonden!"
+    );
 
 
-    // ====================================
-    // MUZIEK
-    // ====================================
-
+    // Muziek starten
     if (music) {
 
         music.currentTime = 0;
@@ -962,18 +1086,42 @@ function startAnimation() {
     }
 
 
+    // ====================================
+    // TIJD
+    // ====================================
+
+    const photoDuration = 1000;
+
+    // Frame 1:
+    // normaal + spiegelbeeld
+    // 4 keer
+    const frame1Duration =
+        photoDuration * 8;
+
+    // Frame 2 + Frame 3:
+    // om en om
+    // 4 keer
+    const frame23Duration =
+        photoDuration * 8;
+
+    const totalDuration =
+        frame1Duration +
+        frame23Duration;
+
+
     let startTime = null;
 
 
     // ====================================
-    // ANIMATIE LOOP
+    // FRAME TEKENEN
     // ====================================
 
     function animate(timestamp) {
 
         if (startTime === null) {
 
-            startTime = timestamp;
+            startTime =
+                timestamp;
 
         }
 
@@ -982,28 +1130,31 @@ function startAnimation() {
             timestamp - startTime;
 
 
-        // ==================================
-        // ACHTERGROND
-        // ==================================
+        // =================================
+        // HARTJES ACHTERGROND
+        // =================================
 
-        drawAnimationBackground();
+        drawHeartBackground();
 
+
+        // =================================
+        // BEPALEN WELK FRAME
+        // =================================
 
         let currentFrame = null;
 
         let mirrored = false;
 
 
-        // ==================================
-        // GEDEELTE 1
-        // FRAME 1
-        // ==================================
+        // ---------------------------------
+        // DEEL 1: FRAME 1
+        // ---------------------------------
 
         if (
-            elapsed < frame1Duration
+            elapsed <
+            frame1Duration
         ) {
 
-            // Welk blok van 1,30 seconde?
             const block =
                 Math.floor(
                     elapsed /
@@ -1011,63 +1162,38 @@ function startAnimation() {
                 );
 
 
-            /*
-                block:
-
-                0 = frame 1
-                1 = spiegelbeeld
-                2 = frame 1
-                3 = spiegelbeeld
-                4 = frame 1
-                5 = spiegelbeeld
-                6 = frame 1
-                7 = spiegelbeeld
-            */
-
-
+            // Frame 1
             currentFrame =
                 capturedFrames[0];
 
 
+            // Om en om normaal/spiegel
             mirrored =
                 block % 2 === 1;
 
         }
 
 
-        // ==================================
-        // GEDEELTE 2
-        // FRAME 2 + FRAME 3
-        // ==================================
+        // ---------------------------------
+        // DEEL 2: FRAME 2 + 3
+        // ---------------------------------
 
         else {
 
-            const secondElapsed =
+            const secondPartTime =
                 elapsed -
                 frame1Duration;
 
 
             const block =
                 Math.floor(
-                    secondElapsed /
+                    secondPartTime /
                     photoDuration
                 );
 
 
-            /*
-                block:
-
-                0 = frame 2
-                1 = frame 3
-                2 = frame 2
-                3 = frame 3
-                4 = frame 2
-                5 = frame 3
-                6 = frame 2
-                7 = frame 3
-            */
-
-
+            // Frame 2, Frame 3,
+            // Frame 2, Frame 3...
             if (
                 block % 2 === 0
             ) {
@@ -1083,31 +1209,29 @@ function startAnimation() {
             }
 
 
-            // Frame 2 en 3 worden
-            // NOOIT gespiegeld.
+            // Frame 2 en 3 NIET spiegelen
             mirrored = false;
 
         }
 
 
-        // ==================================
+        // =================================
         // FOTO TEKENEN
-        // ==================================
+        // =================================
 
         if (currentFrame) {
 
             animationCtx.save();
 
 
+            // Midden van canvas
             animationCtx.translate(
                 350,
                 250
             );
 
 
-            // Alleen frame 1 kan
-            // horizontaal gespiegeld worden.
-
+            // Alleen Frame 1 spiegelen
             if (mirrored) {
 
                 animationCtx.scale(
@@ -1118,6 +1242,7 @@ function startAnimation() {
             }
 
 
+            // Frame tekenen
             animationCtx.drawImage(
                 currentFrame,
                 -250,
@@ -1132,65 +1257,42 @@ function startAnimation() {
         }
 
 
-        // ==================================
-        // HARTJES
-        // ==================================
+        // =================================
+        // EXTRA HARTJES
+        // =================================
 
         drawAnimationHearts(
-            elapsed
+            elapsed / 100
         );
 
 
-        // ==================================
+        // =================================
         // VOLGENDE FRAME
-        // ==================================
+        // =================================
 
         if (
             elapsed <
-            animationDuration
+            totalDuration
         ) {
 
-            animationFrameId =
-                requestAnimationFrame(
-                    animate
-                );
+            requestAnimationFrame(
+                animate
+            );
 
         } else {
-
-            // ==================================
-            // ANIMATIE KLAAR
-            // ==================================
 
             animationRunning =
                 false;
 
-            animationFrameId =
-                null;
+            playAnimationButton.disabled =
+                false;
 
-
-            if (music) {
-
-                music.pause();
-
-                music.currentTime =
-                    0;
-
-            }
-
-
-            if (playAnimationButton) {
-
-                playAnimationButton.disabled =
-                    false;
-
-                playAnimationButton.textContent =
-                    "▶ Animatie opnieuw afspelen";
-
-            }
+            playAnimationButton.textContent =
+                "▶ Animatie opnieuw afspelen";
 
 
             console.log(
-                "ANIMATIE KLAAR!"
+                "Animatie klaar!"
             );
 
         }
@@ -1198,93 +1300,9 @@ function startAnimation() {
     }
 
 
-    animationFrameId =
-        requestAnimationFrame(
-            animate
-        );
-
-}
-
-
-// =================================
-// HARTJES ACHTERGROND
-// =================================
-
-animationCtx.fillStyle = "#180018";
-
-animationCtx.fillRect(
-    0,
-    0,
-    700,
-    500
-);
-
-
-// =================================
-// HARTJES TEKENEN
-// =================================
-
-function drawBackgroundHeart(x, y, size, alpha) {
-
-    animationCtx.save();
-
-    animationCtx.globalAlpha = alpha;
-
-    animationCtx.fillStyle = "#ff4fa3";
-
-    animationCtx.beginPath();
-
-    animationCtx.moveTo(
-        x,
-        y + size * 0.3
+    // Animatie starten
+    requestAnimationFrame(
+        animate
     );
 
-    animationCtx.bezierCurveTo(
-        x - size * 0.9,
-        y - size * 0.3,
-        x - size * 0.6,
-        y - size,
-        x,
-        y - size * 0.35
-    );
-
-    animationCtx.bezierCurveTo(
-        x + size * 0.6,
-        y - size,
-        x + size * 0.9,
-        y - size * 0.3,
-        x,
-        y + size * 0.3
-    );
-
-    animationCtx.fill();
-
-    animationCtx.restore();
-}
-
-
-// =================================
-// ACHTERGROND HARTJES
-// =================================
-
-for (let i = 0; i < 35; i++) {
-
-    const x =
-        (i * 137) % 700;
-
-    const y =
-        (i * 83) % 500;
-
-    const size =
-        8 + ((i * 7) % 18);
-
-    const alpha =
-        0.25 + ((i % 4) * 0.12);
-
-    drawBackgroundHeart(
-        x,
-        y,
-        size,
-        alpha
-    );
 }
