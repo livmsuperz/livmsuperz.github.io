@@ -3,39 +3,63 @@ import {
     FilesetResolver
 } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision/vision_bundle.mjs";
 
+
+// ========================================
+// ELEMENTEN UIT HTML
+// ========================================
+
 const camera = document.getElementById("camera");
 const overlay = document.getElementById("overlay");
 
-const startCameraButton = document.getElementById("startCamera");
-const restartButton = document.getElementById("restart");
-const status = document.getElementById("status");
+const startCameraButton =
+    document.getElementById("startCamera");
 
-const poseTitle = document.getElementById("poseTitle");
-const progressText = document.getElementById("progressText");
+const restartButton =
+    document.getElementById("restart");
 
-const ctx = overlay.getContext("2d");
+const status =
+    document.getElementById("status");
+
+const poseTitle =
+    document.getElementById("poseTitle");
+
+const progressText =
+    document.getElementById("progressText");
+
+const ctx =
+    overlay.getContext("2d");
+
+
+// ========================================
+// VARIABELEN
+// ========================================
 
 let stream = null;
+
 let handLandmarker = null;
+
 let detecting = false;
 
 let currentPose = 1;
+
 let captureTimer = null;
 
 let capturedFrames = [];
 
 
-// ================================
+// ========================================
 // MEDIAPIPE LADEN
-// ================================
+// ========================================
 
 async function loadHandTracking() {
 
-    status.textContent = "Handherkenning laden...";
+    status.textContent =
+        "Handherkenning laden...";
 
-    const vision = await FilesetResolver.forVisionTasks(
-        "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision/wasm"
-    );
+    const vision =
+        await FilesetResolver.forVisionTasks(
+            "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision/wasm"
+        );
 
     handLandmarker =
         await HandLandmarker.createFromOptions(
@@ -52,13 +76,14 @@ async function loadHandTracking() {
             }
         );
 
-    status.textContent = "Handherkenning klaar!";
+    status.textContent =
+        "Handherkenning klaar!";
 }
 
 
-// ================================
+// ========================================
 // CAMERA STARTEN
-// ================================
+// ========================================
 
 startCameraButton.addEventListener(
     "click",
@@ -85,15 +110,19 @@ startCameraButton.addEventListener(
             overlay.height =
                 camera.videoHeight;
 
-            startCameraButton.disabled = true;
+            startCameraButton.disabled =
+                true;
 
-            restartButton.disabled = false;
+            restartButton.disabled =
+                false;
 
             await loadHandTracking();
 
             detecting = true;
 
             currentPose = 1;
+
+            capturedFrames = [];
 
             updatePoseText();
 
@@ -105,18 +134,22 @@ startCameraButton.addEventListener(
 
             status.textContent =
                 "Fout: " + error.message;
+
         }
+
     }
 );
 
 
-// ================================
+// ========================================
 // HANDEN DETECTEREN
-// ================================
+// ========================================
 
 function detectHands() {
 
-    if (!detecting) return;
+    if (!detecting) {
+        return;
+    }
 
     if (
         handLandmarker &&
@@ -130,15 +163,18 @@ function detectHands() {
             );
 
         drawEverything(results);
+
     }
 
-    requestAnimationFrame(detectHands);
+    requestAnimationFrame(
+        detectHands
+    );
 }
 
 
-// ================================
-// TEKST AANPASSEN
-// ================================
+// ========================================
+// POSE-TEKST
+// ========================================
 
 function updatePoseText() {
 
@@ -172,9 +208,9 @@ function updatePoseText() {
 }
 
 
-// ================================
+// ========================================
 // ALLES TEKENEN
-// ================================
+// ========================================
 
 function drawEverything(results) {
 
@@ -186,17 +222,14 @@ function drawEverything(results) {
     );
 
 
-    // --------------------------------
-    // DOELPOSITIE PER POSE
-    // --------------------------------
+    // ====================================
+    // DOELEN
+    // ====================================
 
     let targets = [];
 
 
     if (currentPose === 1) {
-
-        // Eén hand onder de kin
-        // Eén hand rond ooghoogte
 
         targets = [
 
@@ -217,8 +250,6 @@ function drawEverything(results) {
 
     if (currentPose === 2) {
 
-        // Handen naast de oren
-
         targets = [
 
             {
@@ -238,8 +269,6 @@ function drawEverything(results) {
 
     if (currentPose === 3) {
 
-        // Handen naast de kin
-
         targets = [
 
             {
@@ -257,9 +286,9 @@ function drawEverything(results) {
     }
 
 
-    // --------------------------------
+    // ====================================
     // HANDEN OPSPOREN
-    // --------------------------------
+    // ====================================
 
     let hands = [];
 
@@ -322,9 +351,9 @@ function drawEverything(results) {
     }
 
 
-    // --------------------------------
-    // HANDPUNTEN TEKENEN
-    // --------------------------------
+    // ====================================
+    // HANDPUNTEN
+    // ====================================
 
     for (
         const hand of hands
@@ -340,20 +369,20 @@ function drawEverything(results) {
             Math.PI * 2
         );
 
-        ctx.fillStyle = "#ff00ff";
+        ctx.fillStyle =
+            "#ff00ff";
 
         ctx.fill();
 
     }
 
 
-    // --------------------------------
-    // CONTROLEREN OF HANDEN GOED STAAN
-    // --------------------------------
+    // ====================================
+    // AFSTAND CONTROLEREN
+    // ====================================
 
     let target1Correct = false;
     let target2Correct = false;
-
 
     const detectionDistance = 90;
 
@@ -398,9 +427,9 @@ function drawEverything(results) {
     }
 
 
-    // --------------------------------
+    // ====================================
     // GROENE BOLLETJES
-    // --------------------------------
+    // ====================================
 
     drawTarget(
         targets[0].x,
@@ -416,9 +445,9 @@ function drawEverything(results) {
     );
 
 
-    // --------------------------------
-    // AUTOMATISCH VASTLEGGEN
-    // --------------------------------
+    // ====================================
+    // AUTOMATISCH FOTO MAKEN
+    // ====================================
 
     if (
         target1Correct &&
@@ -426,7 +455,9 @@ function drawEverything(results) {
         hands.length >= 2
     ) {
 
-        if (captureTimer === null) {
+        if (
+            captureTimer === null
+        ) {
 
             status.textContent =
                 "🎯 Goed! Blijf even stil...";
@@ -459,29 +490,21 @@ function drawEverything(results) {
         }
 
 
-        if (
-            currentPose === 1
-        ) {
+        if (currentPose === 1) {
 
             status.textContent =
                 "Zet je vuisten op de groene bolletjes.";
 
         }
 
-
-        if (
-            currentPose === 2
-        ) {
+        if (currentPose === 2) {
 
             status.textContent =
                 "Houd je handen plat naast je oren.";
 
         }
 
-
-        if (
-            currentPose === 3
-        ) {
+        if (currentPose === 3) {
 
             status.textContent =
                 "Houd je handen plat naast je kin.";
@@ -493,9 +516,9 @@ function drawEverything(results) {
 }
 
 
-// ================================
+// ========================================
 // POSE OPSLAAN
-// ================================
+// ========================================
 
 function captureCurrentPose() {
 
@@ -538,7 +561,7 @@ function captureCurrentPose() {
     );
 
 
-    // Frame bewaren
+    // Canvas bewaren
     capturedFrames.push(
         frameCanvas
     );
@@ -560,11 +583,13 @@ function captureCurrentPose() {
         " opgeslagen!";
 
 
-    // --------------------------------
+    // ====================================
     // VOLGENDE POSE
-    // --------------------------------
+    // ====================================
 
-    if (currentPose < 3) {
+    if (
+        currentPose < 3
+    ) {
 
         currentPose++;
 
@@ -586,9 +611,9 @@ function captureCurrentPose() {
 }
 
 
-// ================================
+// ========================================
 // ALLE POSES KLAAR
-// ================================
+// ========================================
 
 function finishPoses() {
 
@@ -607,9 +632,19 @@ function finishPoses() {
         "3 / 3";
 
 
-    document
-        .getElementById("animationSection")
-        .classList.remove("hidden");
+    const animationSection =
+        document.getElementById(
+            "animationSection"
+        );
+
+
+    if (animationSection) {
+
+        animationSection.classList.remove(
+            "hidden"
+        );
+
+    }
 
 
     console.log(
@@ -620,9 +655,9 @@ function finishPoses() {
 }
 
 
-// ================================
-// GROENE DOELEN
-// ================================
+// ========================================
+// GROENE DOELEN TEKENEN
+// ========================================
 
 function drawTarget(
     x,
@@ -640,12 +675,10 @@ function drawTarget(
         Math.PI * 2
     );
 
-
     ctx.fillStyle =
         correct
             ? "rgba(0, 255, 120, 0.75)"
             : "rgba(0, 255, 80, 0.35)";
-
 
     ctx.fill();
 
@@ -660,12 +693,10 @@ function drawTarget(
         Math.PI * 2
     );
 
-
     ctx.fillStyle =
         correct
             ? "#ffffff"
             : "#00ff55";
-
 
     ctx.fill();
 
@@ -680,9 +711,9 @@ function drawTarget(
 }
 
 
-// ================================
+// ========================================
 // OPNIEUW
-// ================================
+// ========================================
 
 restartButton.addEventListener(
     "click",
@@ -745,13 +776,51 @@ restartButton.addEventListener(
         startCameraButton.disabled =
             false;
 
+
         restartButton.disabled =
             true;
 
 
-        document
-            .getElementById("animationSection")
-            .classList.add("hidden");
+        const animationSection =
+            document.getElementById(
+                "animationSection"
+            );
+
+
+        if (animationSection) {
+
+            animationSection.classList.add(
+                "hidden"
+            );
+
+        }
+
+
+        // Animatiecanvas leegmaken
+        if (animationCanvas) {
+
+            animationCtx.clearRect(
+                0,
+                0,
+                animationCanvas.width,
+                animationCanvas.height
+            );
+
+        }
+
+
+        animationRunning = false;
+
+
+        if (playAnimationButton) {
+
+            playAnimationButton.disabled =
+                false;
+
+            playAnimationButton.textContent =
+                "▶ Animatie afspelen";
+
+        }
 
 
         status.textContent =
@@ -759,57 +828,84 @@ restartButton.addEventListener(
 
     }
 );
+
+
 // ========================================
-// ANIMATIE
+// ANIMATIE-ELEMENTEN
 // ========================================
 
 const playAnimationButton =
-    document.getElementById("playAnimation");
+    document.getElementById(
+        "playAnimation"
+    );
 
 const animationCanvas =
-    document.getElementById("animationCanvas");
+    document.getElementById(
+        "animationCanvas"
+    );
 
 const animationCtx =
-    animationCanvas.getContext("2d");
+    animationCanvas
+        ? animationCanvas.getContext("2d")
+        : null;
 
 const music =
-    document.getElementById("music");
+    document.getElementById(
+        "music"
+    );
 
 let animationRunning = false;
 
+let animationFrameId = null;
+
 
 // ========================================
-// KNOP "ANIMATIE AFSPELEN"
+// ANIMATIEKNOP
 // ========================================
 
-playAnimationButton.addEventListener(
-    "click",
-    () => {
+if (playAnimationButton) {
 
-        if (capturedFrames.length < 3) {
+    playAnimationButton.addEventListener(
+        "click",
+        () => {
 
-            console.log(
-                "Nog niet alle poses zijn opgeslagen."
-            );
+            if (
+                capturedFrames.length < 3
+            ) {
 
-            return;
+                console.log(
+                    "Nog niet alle poses zijn opgeslagen."
+                );
+
+                return;
+
+            }
+
+
+            if (animationRunning) {
+
+                return;
+
+            }
+
+
+            animationRunning = true;
+
+
+            playAnimationButton.disabled =
+                true;
+
+
+            playAnimationButton.textContent =
+                "⏳ Animatie speelt...";
+
+
+            startAnimation();
+
         }
+    );
 
-        if (animationRunning) {
-            return;
-        }
-
-        animationRunning = true;
-
-        playAnimationButton.disabled = true;
-
-        playAnimationButton.textContent =
-            "⏳ Animatie speelt...";
-
-        startAnimation();
-
-    }
-);
+}
 
 
 // ========================================
@@ -818,55 +914,115 @@ playAnimationButton.addEventListener(
 
 function startAnimation() {
 
-    console.log("ANIMATIE START!");
+    console.log(
+        "ANIMATIE START!"
+    );
 
-    animationCanvas.width = 700;
-    animationCanvas.height = 500;
 
-    animationCanvas.style.display = "block";
+    if (
+        !animationCanvas ||
+        !animationCtx
+    ) {
 
-    if (capturedFrames.length < 3) {
+        console.error(
+            "animationCanvas ontbreekt in animatie.html"
+        );
+
+        animationRunning = false;
+
+        if (playAnimationButton) {
+
+            playAnimationButton.disabled =
+                false;
+
+        }
+
+        return;
+
+    }
+
+
+    animationCanvas.width =
+        700;
+
+    animationCanvas.height =
+        500;
+
+    animationCanvas.style.display =
+        "block";
+
+
+    if (
+        capturedFrames.length < 3
+    ) {
 
         console.log(
             "Te weinig frames:",
             capturedFrames.length
         );
 
+        animationRunning = false;
+
         return;
+
     }
+
 
     console.log(
         "Frames gevonden:",
         capturedFrames.length
     );
 
-    // Muziek
+
+    // ====================================
+    // MUZIEK
+    // ====================================
+
     if (music) {
 
         music.currentTime = 0;
 
-        music.play().catch(error => {
-            console.log(
-                "Muziek kon niet starten:",
-                error
-            );
-        });
+
+        music.play().catch(
+            error => {
+
+                console.log(
+                    "Muziek kon niet starten:",
+                    error
+                );
+
+            }
+        );
 
     }
 
+
     let startTime = null;
 
-    const duration = 12000;
+    const duration =
+        12000;
 
+
+    // ====================================
+    // ANIMATIE LOOP
+    // ====================================
 
     function animate(timestamp) {
 
-        if (startTime === null) {
-            startTime = timestamp;
+        if (
+            startTime === null
+        ) {
+
+            startTime =
+                timestamp;
+
         }
 
+
         const elapsed =
-            timestamp - startTime;
+            timestamp -
+            startTime;
+
 
         const progress =
             Math.min(
@@ -875,66 +1031,29 @@ function startAnimation() {
             );
 
 
-        // =================================
+        // ==================================
         // ACHTERGROND
-        // =================================
+        // ==================================
 
-        animationCtx.fillStyle =
-            "#090014";
-
-        animationCtx.fillRect(
-            0,
-            0,
-            700,
-            500
-        );
+        drawAnimationBackground();
 
 
-        // =================================
-        // STERREN
-        // =================================
-
-        animationCtx.fillStyle =
-            "white";
-
-        for (
-            let i = 0;
-            i < 60;
-            i++
-        ) {
-
-            const x =
-                (i * 83) % 700;
-
-            const y =
-                (i * 47) % 500;
-
-            animationCtx.beginPath();
-
-            animationCtx.arc(
-                x,
-                y,
-                2,
-                0,
-                Math.PI * 2
-            );
-
-            animationCtx.fill();
-
-        }
-
-
-        // =================================
+        // ==================================
         // POSE KIEZEN
-        // =================================
+        // ==================================
 
         let poseIndex;
 
-        if (progress < 0.40) {
+
+        if (
+            progress < 0.40
+        ) {
 
             poseIndex = 0;
 
-        } else if (progress < 0.75) {
+        } else if (
+            progress < 0.75
+        ) {
 
             poseIndex = 1;
 
@@ -949,9 +1068,9 @@ function startAnimation() {
             capturedFrames[poseIndex];
 
 
-        // =================================
+        // ==================================
         // LINKS / RECHTS
-        // =================================
+        // ==================================
 
         const sideMovement =
             Math.sin(
@@ -961,17 +1080,23 @@ function startAnimation() {
             ) * 80;
 
 
-        // =================================
+        // ==================================
         // OP / NEER
-        // =================================
+        // ==================================
 
         let verticalMovement = 0;
 
 
-        if (poseIndex === 0) {
+        // POSE 1 — VUISTEN
+        // 4 keer omhoog/omlaag
+
+        if (
+            poseIndex === 0
+        ) {
 
             const p =
                 progress / 0.40;
+
 
             verticalMovement =
                 Math.sin(
@@ -983,12 +1108,18 @@ function startAnimation() {
         }
 
 
-        if (poseIndex === 1) {
+        // POSE 2 — VLAKKE HANDEN
+        // 4 keer omhoog/omlaag
+
+        if (
+            poseIndex === 1
+        ) {
 
             const p =
                 (progress - 0.40) /
                 0.35;
 
+
             verticalMovement =
                 Math.sin(
                     p *
@@ -999,11 +1130,16 @@ function startAnimation() {
         }
 
 
-        if (poseIndex === 2) {
+        // POSE 3 — KLEINE BEWEGING
+
+        if (
+            poseIndex === 2
+        ) {
 
             const p =
                 (progress - 0.75) /
                 0.25;
+
 
             verticalMovement =
                 Math.sin(
@@ -1015,18 +1151,23 @@ function startAnimation() {
         }
 
 
-        // =================================
+        // ==================================
         // FOTO TEKENEN
-        // =================================
+        // ==================================
 
         if (pose) {
 
             animationCtx.save();
 
+
             animationCtx.translate(
                 350 + sideMovement,
                 250 + verticalMovement
             );
+
+
+            // Foto iets kleiner zodat
+            // de randen niet buiten beeld gaan
 
             animationCtx.drawImage(
                 pose,
@@ -1036,11 +1177,11 @@ function startAnimation() {
                 375
             );
 
+
             animationCtx.restore();
 
         } else {
 
-            // Dit zou nooit moeten gebeuren
             animationCtx.fillStyle =
                 "white";
 
@@ -1059,41 +1200,405 @@ function startAnimation() {
         }
 
 
-        // =================================
+        // ==================================
         // HARTJES
-        // =================================
+        // ==================================
 
         drawAnimationHearts(
             elapsed / 100
         );
 
 
-        // =================================
+        // ==================================
         // VOLGENDE FRAME
-        // =================================
+        // ==================================
 
-        if (progress < 1) {
+        if (
+            progress < 1
+        ) {
 
-            requestAnimationFrame(
-                animate
-            );
+            animationFrameId =
+                requestAnimationFrame(
+                    animate
+                );
 
         } else {
 
-            animationRunning = false;
-
-            playAnimationButton.disabled =
+            animationRunning =
                 false;
 
-            playAnimationButton.textContent =
-                "▶ Animatie opnieuw afspelen";
+
+            animationFrameId =
+                null;
+
+
+            if (music) {
+
+                music.pause();
+
+                music.currentTime =
+                    0;
+
+            }
+
+
+            if (
+                playAnimationButton
+            ) {
+
+                playAnimationButton.disabled =
+                    false;
+
+                playAnimationButton.textContent =
+                    "▶ Animatie opnieuw afspelen";
+
+            }
+
+
+            console.log(
+                "ANIMATIE KLAAR!"
+            );
 
         }
 
     }
 
 
-    requestAnimationFrame(
-        animate
-    );
+    animationFrameId =
+        requestAnimationFrame(
+            animate
+        );
+
 }
+
+
+// ========================================
+// ANIMATIE-ACHTERGROND
+// ========================================
+
+function drawAnimationBackground() {
+
+    const width =
+        animationCanvas.width;
+
+    const height =
+        animationCanvas.height;
+
+
+    // Donkere ruimte
+
+    animationCtx.fillStyle =
+        "#080014";
+
+    animationCtx.fillRect(
+        0,
+        0,
+        width,
+        height
+    );
+
+
+    // Sterren
+
+    animationCtx.fillStyle =
+        "rgba(255,255,255,0.9)";
+
+
+    for (
+        let i = 0;
+        i < 90;
+        i++
+    ) {
+
+        const x =
+            (i * 83) % width;
+
+        const y =
+            (i * 47) % height;
+
+
+        const size =
+            1 +
+            ((i * 17) % 3);
+
+
+        animationCtx.beginPath();
+
+        animationCtx.arc(
+            x,
+            y,
+            size,
+            0,
+            Math.PI * 2
+        );
+
+        animationCtx.fill();
+
+    }
+
+}
+
+
+// ========================================
+// HARTJES TEKENEN
+// ========================================
+
+function drawAnimationHearts(time) {
+
+    const width =
+        animationCanvas.width;
+
+    const height =
+        animationCanvas.height;
+
+
+    const hearts = [
+
+        {
+            x: 90,
+            y: 100,
+            size: 20,
+            speed: 0.8
+        },
+
+        {
+            x: 610,
+            y: 90,
+            size: 24,
+            speed: 1
+        },
+
+        {
+            x: 130,
+            y: 390,
+            size: 18,
+            speed: 0.7
+        },
+
+        {
+            x: 570,
+            y: 390,
+            size: 22,
+            speed: 0.9
+        },
+
+        {
+            x: 350,
+            y: 65,
+            size: 16,
+            speed: 1.2
+        },
+
+        {
+            x: 350,
+            y: 435,
+            size: 19,
+            speed: 0.8
+        }
+
+    ];
+
+
+    for (
+        const heart of hearts
+    ) {
+
+        const movement =
+            Math.sin(
+                time *
+                heart.speed
+            ) * 12;
+
+
+        const pulse =
+            1 +
+            Math.sin(
+                time *
+                0.08
+            ) * 0.08;
+
+
+        drawHeart(
+            heart.x + movement,
+            heart.y,
+            heart.size * pulse
+        );
+
+    }
+
+
+    // Kleine hartjes rondom het midden
+
+    for (
+        let i = 0;
+        i < 8;
+        i++
+    ) {
+
+        const angle =
+            (Math.PI * 2 / 8) *
+            i;
+
+
+        const radius = 190;
+
+
+        const x =
+            width / 2 +
+            Math.cos(angle) *
+            radius;
+
+
+        const y =
+            height / 2 +
+            Math.sin(angle) *
+            radius;
+
+
+        const size =
+            10 +
+            Math.sin(
+                time * 0.1 + i
+            ) * 3;
+
+
+        drawHeart(
+            x,
+            y,
+            size
+        );
+
+    }
+
+}
+
+
+// ========================================
+// ÉÉN HART TEKENEN
+// ========================================
+
+function drawHeart(
+    x,
+    y,
+    size
+) {
+
+    animationCtx.save();
+
+
+    animationCtx.translate(
+        x,
+        y
+    );
+
+
+    animationCtx.beginPath();
+
+
+    animationCtx.moveTo(
+        0,
+        size * 0.35
+    );
+
+
+    animationCtx.bezierCurveTo(
+        -size * 1.1,
+        -size * 0.35,
+        -size * 0.55,
+        -size,
+        0,
+        -size * 0.35
+    );
+
+
+    animationCtx.bezierCurveTo(
+        size * 0.55,
+        -size,
+        size * 1.1,
+        -size * 0.35,
+        0,
+        size * 0.35
+    );
+
+
+    animationCtx.closePath();
+
+
+    animationCtx.fillStyle =
+        "#ff4fa3";
+
+    animationCtx.shadowColor =
+        "#ff4fa3";
+
+    animationCtx.shadowBlur =
+        12;
+
+    animationCtx.fill();
+
+
+    animationCtx.restore();
+
+}
+
+
+// ========================================
+// ESC-TOETS = ANIMATIE STOPPEN
+// ========================================
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            event.key === "Escape" &&
+            animationRunning
+        ) {
+
+            animationRunning = false;
+
+
+            if (
+                animationFrameId !== null
+            ) {
+
+                cancelAnimationFrame(
+                    animationFrameId
+                );
+
+                animationFrameId =
+                    null;
+
+            }
+
+
+            if (music) {
+
+                music.pause();
+
+                music.currentTime =
+                    0;
+
+            }
+
+
+            if (
+                playAnimationButton
+            ) {
+
+                playAnimationButton.disabled =
+                    false;
+
+                playAnimationButton.textContent =
+                    "▶ Animatie opnieuw afspelen";
+
+            }
+
+
+            console.log(
+                "Animatie gestopt."
+            );
+
+        }
+
+    }
+);
