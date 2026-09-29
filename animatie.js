@@ -846,32 +846,25 @@ if (playAnimationButton) {
         "click",
         () => {
 
-            if (
-                capturedFrames.length < 3
-            ) {
+            if (capturedFrames.length < 3) {
 
                 console.log(
-                    "Nog niet alle foto's."
+                    "Nog niet alle foto's zijn opgeslagen."
                 );
 
                 return;
-
             }
-
 
             if (animationRunning) {
                 return;
             }
 
-
             animationRunning = true;
 
-            playAnimationButton.disabled =
-                true;
+            playAnimationButton.disabled = true;
 
             playAnimationButton.textContent =
                 "⏳ Animatie speelt...";
-
 
             startAnimation();
 
@@ -882,14 +875,74 @@ if (playAnimationButton) {
 
 
 // ========================================
+// ANIMATIE INSTELLINGEN
+// ========================================
+
+// Elke foto blijft 1,30 seconde zichtbaar.
+const photoDuration = 1300;
+
+// Frame 1 wordt 4 keer gespiegeld.
+const frame1Rounds = 4;
+
+// Totale tijd van frame 1:
+// 8 stukken × 1,30 seconde
+const frame1Duration =
+    photoDuration * 8;
+
+// Daarna laten we frame 2 en 3
+// steeds om en om zien.
+const frame23Rounds = 4;
+
+// 8 stukken × 1,30 seconde
+const frame23Duration =
+    photoDuration * 8;
+
+// Totale animatieduur
+const animationDuration =
+    frame1Duration +
+    frame23Duration;
+
+
+// ========================================
 // ANIMATIE STARTEN
 // ========================================
 
 function startAnimation() {
 
+    console.log(
+        "ANIMATIE START!"
+    );
+
+
+    if (
+        !animationCanvas ||
+        !animationCtx
+    ) {
+
+        console.error(
+            "animationCanvas ontbreekt."
+        );
+
+        animationRunning = false;
+
+        if (playAnimationButton) {
+
+            playAnimationButton.disabled =
+                false;
+
+        }
+
+        return;
+    }
+
+
     animationCanvas.width = 700;
     animationCanvas.height = 500;
 
+
+    // ====================================
+    // MUZIEK
+    // ====================================
 
     if (music) {
 
@@ -909,40 +962,24 @@ function startAnimation() {
     }
 
 
-    const animationDuration =
-        10000;
-
-
-    const photoSwitchSpeed =
-        110;
-
-
     let startTime = null;
 
 
+    // ====================================
+    // ANIMATIE LOOP
+    // ====================================
+
     function animate(timestamp) {
 
-        if (
-            startTime === null
-        ) {
+        if (startTime === null) {
 
-            startTime =
-                timestamp;
+            startTime = timestamp;
 
         }
 
 
         const elapsed =
-            timestamp -
-            startTime;
-
-
-        const progress =
-            Math.min(
-                elapsed /
-                animationDuration,
-                1
-            );
+            timestamp - startTime;
 
 
         // ==================================
@@ -952,157 +989,127 @@ function startAnimation() {
         drawAnimationBackground();
 
 
-        // ==================================
-        // WELKE POSE?
-        // ==================================
+        let currentFrame = null;
 
-        let poseIndex;
+        let mirrored = false;
 
+
+        // ==================================
+        // GEDEELTE 1
+        // FRAME 1
+        // ==================================
 
         if (
-            progress < 0.33
+            elapsed < frame1Duration
         ) {
 
-            poseIndex = 0;
-
-        } else if (
-            progress < 0.66
-        ) {
-
-            poseIndex = 1;
-
-        } else {
-
-            poseIndex = 2;
-
-        }
+            // Welk blok van 1,30 seconde?
+            const block =
+                Math.floor(
+                    elapsed /
+                    photoDuration
+                );
 
 
-        const pose =
-            capturedFrames[poseIndex];
+            /*
+                block:
+
+                0 = frame 1
+                1 = spiegelbeeld
+                2 = frame 1
+                3 = spiegelbeeld
+                4 = frame 1
+                5 = spiegelbeeld
+                6 = frame 1
+                7 = spiegelbeeld
+            */
 
 
-        // ==================================
-        // SNEL WISSELEN
-        // ==================================
-
-        /*
-            Elke 110 milliseconden wisselen
-            we tussen:
-
-            normale foto
-            gespiegeld
-            normale foto
-            gespiegeld
-
-            Daardoor lijkt het meer op
-            een snelle stop-motion animatie.
-        */
-
-        const switchNumber =
-            Math.floor(
-                elapsed /
-                photoSwitchSpeed
-            );
+            currentFrame =
+                capturedFrames[0];
 
 
-        const mirrored =
-            switchNumber % 2 === 1;
-
-
-        // ==================================
-        // ARMEN OP / NEER
-        // ==================================
-
-        let verticalMovement = 0;
-
-
-        if (
-            poseIndex === 0
-        ) {
-
-            const localProgress =
-                progress / 0.33;
-
-
-            verticalMovement =
-                Math.sin(
-                    localProgress *
-                    Math.PI *
-                    8
-                ) * 28;
-
-        }
-
-
-        if (
-            poseIndex === 1
-        ) {
-
-            const localProgress =
-                (progress - 0.33) /
-                0.33;
-
-
-            verticalMovement =
-                Math.sin(
-                    localProgress *
-                    Math.PI *
-                    8
-                ) * 28;
-
-        }
-
-
-        if (
-            poseIndex === 2
-        ) {
-
-            const localProgress =
-                (progress - 0.66) /
-                0.34;
-
-
-            verticalMovement =
-                Math.sin(
-                    localProgress *
-                    Math.PI *
-                    4
-                ) * 18;
+            mirrored =
+                block % 2 === 1;
 
         }
 
 
         // ==================================
-        // LINKS → RECHTS → LINKS
+        // GEDEELTE 2
+        // FRAME 2 + FRAME 3
         // ==================================
 
-        const sideMovement =
-            Math.sin(
-                progress *
-                Math.PI *
-                4
-            ) * 90;
+        else {
+
+            const secondElapsed =
+                elapsed -
+                frame1Duration;
+
+
+            const block =
+                Math.floor(
+                    secondElapsed /
+                    photoDuration
+                );
+
+
+            /*
+                block:
+
+                0 = frame 2
+                1 = frame 3
+                2 = frame 2
+                3 = frame 3
+                4 = frame 2
+                5 = frame 3
+                6 = frame 2
+                7 = frame 3
+            */
+
+
+            if (
+                block % 2 === 0
+            ) {
+
+                currentFrame =
+                    capturedFrames[1];
+
+            } else {
+
+                currentFrame =
+                    capturedFrames[2];
+
+            }
+
+
+            // Frame 2 en 3 worden
+            // NOOIT gespiegeld.
+            mirrored = false;
+
+        }
 
 
         // ==================================
         // FOTO TEKENEN
         // ==================================
 
-        if (pose) {
+        if (currentFrame) {
 
             animationCtx.save();
 
 
             animationCtx.translate(
-                350 + sideMovement,
-                250 + verticalMovement
+                350,
+                250
             );
 
 
+            // Alleen frame 1 kan
+            // horizontaal gespiegeld worden.
+
             if (mirrored) {
 
-                // Horizontaal spiegelen
                 animationCtx.scale(
                     -1,
                     1
@@ -1112,7 +1119,7 @@ function startAnimation() {
 
 
             animationCtx.drawImage(
-                pose,
+                currentFrame,
                 -250,
                 -188,
                 500,
@@ -1139,7 +1146,8 @@ function startAnimation() {
         // ==================================
 
         if (
-            progress < 1
+            elapsed <
+            animationDuration
         ) {
 
             animationFrameId =
@@ -1149,9 +1157,12 @@ function startAnimation() {
 
         } else {
 
+            // ==================================
+            // ANIMATIE KLAAR
+            // ==================================
+
             animationRunning =
                 false;
-
 
             animationFrameId =
                 null;
@@ -1161,17 +1172,21 @@ function startAnimation() {
 
                 music.pause();
 
-                music.currentTime = 0;
+                music.currentTime =
+                    0;
 
             }
 
 
-            playAnimationButton.disabled =
-                false;
+            if (playAnimationButton) {
 
+                playAnimationButton.disabled =
+                    false;
 
-            playAnimationButton.textContent =
-                "▶ Animatie opnieuw afspelen";
+                playAnimationButton.textContent =
+                    "▶ Animatie opnieuw afspelen";
+
+            }
 
 
             console.log(
@@ -1301,7 +1316,7 @@ function drawAnimationHearts(time) {
     }
 
 
-    // Hartjes rondom de persoon
+    // Kleine hartjes rond de persoon
 
     for (
         let i = 0;
@@ -1414,7 +1429,7 @@ function drawHeart(
 
 
 // ========================================
-// ESC = STOP
+// ESC = ANIMATIE STOPPEN
 // ========================================
 
 document.addEventListener(
