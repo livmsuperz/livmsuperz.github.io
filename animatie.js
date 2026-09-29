@@ -5,7 +5,7 @@ import {
 
 
 // ========================================
-// ELEMENTEN UIT HTML
+// HTML ELEMENTEN
 // ========================================
 
 const camera = document.getElementById("camera");
@@ -26,8 +26,25 @@ const poseTitle =
 const progressText =
     document.getElementById("progressText");
 
+const animationSection =
+    document.getElementById("animationSection");
+
+const playAnimationButton =
+    document.getElementById("playAnimation");
+
+const animationCanvas =
+    document.getElementById("animationCanvas");
+
+const music =
+    document.getElementById("music");
+
 const ctx =
     overlay.getContext("2d");
+
+const animationCtx =
+    animationCanvas
+        ? animationCanvas.getContext("2d")
+        : null;
 
 
 // ========================================
@@ -45,6 +62,10 @@ let currentPose = 1;
 let captureTimer = null;
 
 let capturedFrames = [];
+
+let animationRunning = false;
+
+let animationFrameId = null;
 
 
 // ========================================
@@ -116,13 +137,13 @@ startCameraButton.addEventListener(
             restartButton.disabled =
                 false;
 
-            await loadHandTracking();
-
-            detecting = true;
+            capturedFrames = [];
 
             currentPose = 1;
 
-            capturedFrames = [];
+            await loadHandTracking();
+
+            detecting = true;
 
             updatePoseText();
 
@@ -173,7 +194,7 @@ function detectHands() {
 
 
 // ========================================
-// POSE-TEKST
+// TEKST
 // ========================================
 
 function updatePoseText() {
@@ -192,6 +213,7 @@ function updatePoseText() {
 
     }
 
+
     if (currentPose === 2) {
 
         status.textContent =
@@ -199,12 +221,14 @@ function updatePoseText() {
 
     }
 
+
     if (currentPose === 3) {
 
         status.textContent =
             "Houd je handen plat naast je kin.";
 
     }
+
 }
 
 
@@ -223,7 +247,7 @@ function drawEverything(results) {
 
 
     // ====================================
-    // DOELEN
+    // GROENE DOELPUNTEN
     // ====================================
 
     let targets = [];
@@ -287,7 +311,7 @@ function drawEverything(results) {
 
 
     // ====================================
-    // HANDEN OPSPOREN
+    // HANDEN
     // ====================================
 
     let hands = [];
@@ -378,7 +402,7 @@ function drawEverything(results) {
 
 
     // ====================================
-    // AFSTAND CONTROLEREN
+    // AFSTAND
     // ====================================
 
     let target1Correct = false;
@@ -428,7 +452,7 @@ function drawEverything(results) {
 
 
     // ====================================
-    // GROENE BOLLETJES
+    // GROENE PUNTEN
     // ====================================
 
     drawTarget(
@@ -436,7 +460,6 @@ function drawEverything(results) {
         targets[0].y,
         target1Correct
     );
-
 
     drawTarget(
         targets[1].x,
@@ -446,7 +469,7 @@ function drawEverything(results) {
 
 
     // ====================================
-    // AUTOMATISCH FOTO MAKEN
+    // AUTOMATISCHE FOTO
     // ====================================
 
     if (
@@ -490,28 +513,65 @@ function drawEverything(results) {
         }
 
 
-        if (currentPose === 1) {
-
-            status.textContent =
-                "Zet je vuisten op de groene bolletjes.";
-
-        }
-
-        if (currentPose === 2) {
-
-            status.textContent =
-                "Houd je handen plat naast je oren.";
-
-        }
-
-        if (currentPose === 3) {
-
-            status.textContent =
-                "Houd je handen plat naast je kin.";
-
-        }
+        updatePoseText();
 
     }
+
+}
+
+
+// ========================================
+// GROEN DOELPUNT
+// ========================================
+
+function drawTarget(
+    x,
+    y,
+    correct
+) {
+
+    ctx.beginPath();
+
+    ctx.arc(
+        x,
+        y,
+        30,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.fillStyle =
+        correct
+            ? "rgba(0,255,120,0.75)"
+            : "rgba(0,255,80,0.35)";
+
+    ctx.fill();
+
+
+    ctx.beginPath();
+
+    ctx.arc(
+        x,
+        y,
+        15,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.fillStyle =
+        correct
+            ? "white"
+            : "#00ff55";
+
+    ctx.fill();
+
+
+    ctx.strokeStyle =
+        "white";
+
+    ctx.lineWidth = 3;
+
+    ctx.stroke();
 
 }
 
@@ -540,7 +600,7 @@ function captureCurrentPose() {
         frameCanvas.getContext("2d");
 
 
-    // Camera spiegelen
+    // Spiegel de webcamfoto
     frameCtx.translate(
         frameCanvas.width,
         0
@@ -561,7 +621,6 @@ function captureCurrentPose() {
     );
 
 
-    // Canvas bewaren
     capturedFrames.push(
         frameCanvas
     );
@@ -583,15 +642,12 @@ function captureCurrentPose() {
         " opgeslagen!";
 
 
-    // ====================================
-    // VOLGENDE POSE
-    // ====================================
-
     if (
         currentPose < 3
     ) {
 
         currentPose++;
+
 
         setTimeout(
             () => {
@@ -599,7 +655,7 @@ function captureCurrentPose() {
                 updatePoseText();
 
             },
-            700
+            500
         );
 
     } else {
@@ -632,12 +688,6 @@ function finishPoses() {
         "3 / 3";
 
 
-    const animationSection =
-        document.getElementById(
-            "animationSection"
-        );
-
-
     if (animationSection) {
 
         animationSection.classList.remove(
@@ -651,62 +701,6 @@ function finishPoses() {
         "Alle frames:",
         capturedFrames
     );
-
-}
-
-
-// ========================================
-// GROENE DOELEN TEKENEN
-// ========================================
-
-function drawTarget(
-    x,
-    y,
-    correct
-) {
-
-    ctx.beginPath();
-
-    ctx.arc(
-        x,
-        y,
-        30,
-        0,
-        Math.PI * 2
-    );
-
-    ctx.fillStyle =
-        correct
-            ? "rgba(0, 255, 120, 0.75)"
-            : "rgba(0, 255, 80, 0.35)";
-
-    ctx.fill();
-
-
-    ctx.beginPath();
-
-    ctx.arc(
-        x,
-        y,
-        15,
-        0,
-        Math.PI * 2
-    );
-
-    ctx.fillStyle =
-        correct
-            ? "#ffffff"
-            : "#00ff55";
-
-    ctx.fill();
-
-
-    ctx.strokeStyle =
-        "white";
-
-    ctx.lineWidth = 3;
-
-    ctx.stroke();
 
 }
 
@@ -731,6 +725,26 @@ restartButton.addEventListener(
             );
 
             captureTimer = null;
+
+        }
+
+
+        if (animationFrameId !== null) {
+
+            cancelAnimationFrame(
+                animationFrameId
+            );
+
+            animationFrameId = null;
+
+        }
+
+
+        if (music) {
+
+            music.pause();
+
+            music.currentTime = 0;
 
         }
 
@@ -764,6 +778,8 @@ restartButton.addEventListener(
 
         currentPose = 1;
 
+        animationRunning = false;
+
 
         poseTitle.textContent =
             "Pose 1";
@@ -773,18 +789,16 @@ restartButton.addEventListener(
             "0 / 3";
 
 
+        status.textContent =
+            "Camera uit.";
+
+
         startCameraButton.disabled =
             false;
 
 
         restartButton.disabled =
             true;
-
-
-        const animationSection =
-            document.getElementById(
-                "animationSection"
-            );
 
 
         if (animationSection) {
@@ -796,7 +810,6 @@ restartButton.addEventListener(
         }
 
 
-        // Animatiecanvas leegmaken
         if (animationCanvas) {
 
             animationCtx.clearRect(
@@ -809,9 +822,6 @@ restartButton.addEventListener(
         }
 
 
-        animationRunning = false;
-
-
         if (playAnimationButton) {
 
             playAnimationButton.disabled =
@@ -822,45 +832,12 @@ restartButton.addEventListener(
 
         }
 
-
-        status.textContent =
-            "Camera uit.";
-
     }
 );
 
 
 // ========================================
-// ANIMATIE-ELEMENTEN
-// ========================================
-
-const playAnimationButton =
-    document.getElementById(
-        "playAnimation"
-    );
-
-const animationCanvas =
-    document.getElementById(
-        "animationCanvas"
-    );
-
-const animationCtx =
-    animationCanvas
-        ? animationCanvas.getContext("2d")
-        : null;
-
-const music =
-    document.getElementById(
-        "music"
-    );
-
-let animationRunning = false;
-
-let animationFrameId = null;
-
-
-// ========================================
-// ANIMATIEKNOP
+// ANIMATIE
 // ========================================
 
 if (playAnimationButton) {
@@ -874,7 +851,7 @@ if (playAnimationButton) {
             ) {
 
                 console.log(
-                    "Nog niet alle poses zijn opgeslagen."
+                    "Nog niet alle foto's."
                 );
 
                 return;
@@ -883,18 +860,14 @@ if (playAnimationButton) {
 
 
             if (animationRunning) {
-
                 return;
-
             }
 
 
             animationRunning = true;
 
-
             playAnimationButton.disabled =
                 true;
-
 
             playAnimationButton.textContent =
                 "⏳ Animatie speelt...";
@@ -914,74 +887,13 @@ if (playAnimationButton) {
 
 function startAnimation() {
 
-    console.log(
-        "ANIMATIE START!"
-    );
+    animationCanvas.width = 700;
+    animationCanvas.height = 500;
 
-
-    if (
-        !animationCanvas ||
-        !animationCtx
-    ) {
-
-        console.error(
-            "animationCanvas ontbreekt in animatie.html"
-        );
-
-        animationRunning = false;
-
-        if (playAnimationButton) {
-
-            playAnimationButton.disabled =
-                false;
-
-        }
-
-        return;
-
-    }
-
-
-    animationCanvas.width =
-        700;
-
-    animationCanvas.height =
-        500;
-
-    animationCanvas.style.display =
-        "block";
-
-
-    if (
-        capturedFrames.length < 3
-    ) {
-
-        console.log(
-            "Te weinig frames:",
-            capturedFrames.length
-        );
-
-        animationRunning = false;
-
-        return;
-
-    }
-
-
-    console.log(
-        "Frames gevonden:",
-        capturedFrames.length
-    );
-
-
-    // ====================================
-    // MUZIEK
-    // ====================================
 
     if (music) {
 
         music.currentTime = 0;
-
 
         music.play().catch(
             error => {
@@ -997,15 +909,16 @@ function startAnimation() {
     }
 
 
+    const animationDuration =
+        10000;
+
+
+    const photoSwitchSpeed =
+        110;
+
+
     let startTime = null;
 
-    const duration =
-        12000;
-
-
-    // ====================================
-    // ANIMATIE LOOP
-    // ====================================
 
     function animate(timestamp) {
 
@@ -1026,7 +939,8 @@ function startAnimation() {
 
         const progress =
             Math.min(
-                elapsed / duration,
+                elapsed /
+                animationDuration,
                 1
             );
 
@@ -1039,20 +953,20 @@ function startAnimation() {
 
 
         // ==================================
-        // POSE KIEZEN
+        // WELKE POSE?
         // ==================================
 
         let poseIndex;
 
 
         if (
-            progress < 0.40
+            progress < 0.33
         ) {
 
             poseIndex = 0;
 
         } else if (
-            progress < 0.75
+            progress < 0.66
         ) {
 
             poseIndex = 1;
@@ -1069,7 +983,98 @@ function startAnimation() {
 
 
         // ==================================
-        // LINKS / RECHTS
+        // SNEL WISSELEN
+        // ==================================
+
+        /*
+            Elke 110 milliseconden wisselen
+            we tussen:
+
+            normale foto
+            gespiegeld
+            normale foto
+            gespiegeld
+
+            Daardoor lijkt het meer op
+            een snelle stop-motion animatie.
+        */
+
+        const switchNumber =
+            Math.floor(
+                elapsed /
+                photoSwitchSpeed
+            );
+
+
+        const mirrored =
+            switchNumber % 2 === 1;
+
+
+        // ==================================
+        // ARMEN OP / NEER
+        // ==================================
+
+        let verticalMovement = 0;
+
+
+        if (
+            poseIndex === 0
+        ) {
+
+            const localProgress =
+                progress / 0.33;
+
+
+            verticalMovement =
+                Math.sin(
+                    localProgress *
+                    Math.PI *
+                    8
+                ) * 28;
+
+        }
+
+
+        if (
+            poseIndex === 1
+        ) {
+
+            const localProgress =
+                (progress - 0.33) /
+                0.33;
+
+
+            verticalMovement =
+                Math.sin(
+                    localProgress *
+                    Math.PI *
+                    8
+                ) * 28;
+
+        }
+
+
+        if (
+            poseIndex === 2
+        ) {
+
+            const localProgress =
+                (progress - 0.66) /
+                0.34;
+
+
+            verticalMovement =
+                Math.sin(
+                    localProgress *
+                    Math.PI *
+                    4
+                ) * 18;
+
+        }
+
+
+        // ==================================
+        // LINKS → RECHTS → LINKS
         // ==================================
 
         const sideMovement =
@@ -1077,78 +1082,7 @@ function startAnimation() {
                 progress *
                 Math.PI *
                 4
-            ) * 80;
-
-
-        // ==================================
-        // OP / NEER
-        // ==================================
-
-        let verticalMovement = 0;
-
-
-        // POSE 1 — VUISTEN
-        // 4 keer omhoog/omlaag
-
-        if (
-            poseIndex === 0
-        ) {
-
-            const p =
-                progress / 0.40;
-
-
-            verticalMovement =
-                Math.sin(
-                    p *
-                    Math.PI *
-                    8
-                ) * 30;
-
-        }
-
-
-        // POSE 2 — VLAKKE HANDEN
-        // 4 keer omhoog/omlaag
-
-        if (
-            poseIndex === 1
-        ) {
-
-            const p =
-                (progress - 0.40) /
-                0.35;
-
-
-            verticalMovement =
-                Math.sin(
-                    p *
-                    Math.PI *
-                    8
-                ) * 30;
-
-        }
-
-
-        // POSE 3 — KLEINE BEWEGING
-
-        if (
-            poseIndex === 2
-        ) {
-
-            const p =
-                (progress - 0.75) /
-                0.25;
-
-
-            verticalMovement =
-                Math.sin(
-                    p *
-                    Math.PI *
-                    2
-                ) * 15;
-
-        }
+            ) * 90;
 
 
         // ==================================
@@ -1166,8 +1100,16 @@ function startAnimation() {
             );
 
 
-            // Foto iets kleiner zodat
-            // de randen niet buiten beeld gaan
+            if (mirrored) {
+
+                // Horizontaal spiegelen
+                animationCtx.scale(
+                    -1,
+                    1
+                );
+
+            }
+
 
             animationCtx.drawImage(
                 pose,
@@ -1180,23 +1122,6 @@ function startAnimation() {
 
             animationCtx.restore();
 
-        } else {
-
-            animationCtx.fillStyle =
-                "white";
-
-            animationCtx.font =
-                "24px Arial";
-
-            animationCtx.textAlign =
-                "center";
-
-            animationCtx.fillText(
-                "Geen pose gevonden",
-                350,
-                250
-            );
-
         }
 
 
@@ -1205,7 +1130,7 @@ function startAnimation() {
         // ==================================
 
         drawAnimationHearts(
-            elapsed / 100
+            elapsed
         );
 
 
@@ -1236,23 +1161,17 @@ function startAnimation() {
 
                 music.pause();
 
-                music.currentTime =
-                    0;
+                music.currentTime = 0;
 
             }
 
 
-            if (
-                playAnimationButton
-            ) {
+            playAnimationButton.disabled =
+                false;
 
-                playAnimationButton.disabled =
-                    false;
 
-                playAnimationButton.textContent =
-                    "▶ Animatie opnieuw afspelen";
-
-            }
+            playAnimationButton.textContent =
+                "▶ Animatie opnieuw afspelen";
 
 
             console.log(
@@ -1273,7 +1192,7 @@ function startAnimation() {
 
 
 // ========================================
-// ANIMATIE-ACHTERGROND
+// STERRENACHTERGROND
 // ========================================
 
 function drawAnimationBackground() {
@@ -1285,10 +1204,9 @@ function drawAnimationBackground() {
         animationCanvas.height;
 
 
-    // Donkere ruimte
-
     animationCtx.fillStyle =
         "#080014";
+
 
     animationCtx.fillRect(
         0,
@@ -1301,12 +1219,12 @@ function drawAnimationBackground() {
     // Sterren
 
     animationCtx.fillStyle =
-        "rgba(255,255,255,0.9)";
+        "white";
 
 
     for (
         let i = 0;
-        i < 90;
+        i < 100;
         i++
     ) {
 
@@ -1340,94 +1258,50 @@ function drawAnimationBackground() {
 
 
 // ========================================
-// HARTJES TEKENEN
+// HARTJES
 // ========================================
 
 function drawAnimationHearts(time) {
 
-    const width =
-        animationCanvas.width;
-
-    const height =
-        animationCanvas.height;
-
-
     const hearts = [
 
-        {
-            x: 90,
-            y: 100,
-            size: 20,
-            speed: 0.8
-        },
-
-        {
-            x: 610,
-            y: 90,
-            size: 24,
-            speed: 1
-        },
-
-        {
-            x: 130,
-            y: 390,
-            size: 18,
-            speed: 0.7
-        },
-
-        {
-            x: 570,
-            y: 390,
-            size: 22,
-            speed: 0.9
-        },
-
-        {
-            x: 350,
-            y: 65,
-            size: 16,
-            speed: 1.2
-        },
-
-        {
-            x: 350,
-            y: 435,
-            size: 19,
-            speed: 0.8
-        }
+        [80, 90, 20],
+        [620, 80, 24],
+        [100, 400, 18],
+        [600, 400, 22],
+        [350, 60, 17],
+        [350, 440, 18]
 
     ];
 
 
     for (
-        const heart of hearts
+        let i = 0;
+        i < hearts.length;
+        i++
     ) {
 
-        const movement =
+        const heart =
+            hearts[i];
+
+
+        const floating =
             Math.sin(
-                time *
-                heart.speed
+                time * 0.003 +
+                i
             ) * 12;
 
 
-        const pulse =
-            1 +
-            Math.sin(
-                time *
-                0.08
-            ) * 0.08;
-
-
         drawHeart(
-            heart.x + movement,
-            heart.y,
-            heart.size * pulse
+            heart[0] + floating,
+            heart[1],
+            heart[2]
         );
 
     }
 
 
-    // Kleine hartjes rondom het midden
+    // Hartjes rondom de persoon
 
     for (
         let i = 0;
@@ -1436,36 +1310,31 @@ function drawAnimationHearts(time) {
     ) {
 
         const angle =
-            (Math.PI * 2 / 8) *
-            i;
+            i *
+            Math.PI *
+            2 /
+            8;
 
 
         const radius = 190;
 
 
         const x =
-            width / 2 +
+            350 +
             Math.cos(angle) *
             radius;
 
 
         const y =
-            height / 2 +
+            250 +
             Math.sin(angle) *
             radius;
-
-
-        const size =
-            10 +
-            Math.sin(
-                time * 0.1 + i
-            ) * 3;
 
 
         drawHeart(
             x,
             y,
-            size
+            10
         );
 
     }
@@ -1474,7 +1343,7 @@ function drawAnimationHearts(time) {
 
 
 // ========================================
-// ÉÉN HART TEKENEN
+// HART TEKENEN
 // ========================================
 
 function drawHeart(
@@ -1527,11 +1396,14 @@ function drawHeart(
     animationCtx.fillStyle =
         "#ff4fa3";
 
+
     animationCtx.shadowColor =
         "#ff4fa3";
 
+
     animationCtx.shadowBlur =
-        12;
+        10;
+
 
     animationCtx.fill();
 
@@ -1542,7 +1414,7 @@ function drawHeart(
 
 
 // ========================================
-// ESC-TOETS = ANIMATIE STOPPEN
+// ESC = STOP
 // ========================================
 
 document.addEventListener(
@@ -1554,7 +1426,8 @@ document.addEventListener(
             animationRunning
         ) {
 
-            animationRunning = false;
+            animationRunning =
+                false;
 
 
             if (
@@ -1592,11 +1465,6 @@ document.addEventListener(
                     "▶ Animatie opnieuw afspelen";
 
             }
-
-
-            console.log(
-                "Animatie gestopt."
-            );
 
         }
 
