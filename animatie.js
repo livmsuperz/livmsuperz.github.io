@@ -878,8 +878,8 @@ if (playAnimationButton) {
 // ANIMATIE INSTELLINGEN
 // ========================================
 
-// Elke foto blijft 1,30 seconde zichtbaar.
-const photoDuration = 1300;
+// Elke foto blijft 1,0 seconde zichtbaar.
+const photoDuration = 1000;
 
 // Frame 1 wordt 4 keer gespiegeld.
 const frame1Rounds = 4;
