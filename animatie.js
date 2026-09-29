@@ -1206,282 +1206,85 @@ function startAnimation() {
 }
 
 
-// ========================================
-// STERRENACHTERGROND
-// ========================================
+// =================================
+// HARTJES ACHTERGROND
+// =================================
 
-function drawAnimationBackground() {
+animationCtx.fillStyle = "#180018";
 
-    const width =
-        animationCanvas.width;
-
-    const height =
-        animationCanvas.height;
-
-
-    animationCtx.fillStyle =
-        "#080014";
+animationCtx.fillRect(
+    0,
+    0,
+    700,
+    500
+);
 
 
-    animationCtx.fillRect(
-        0,
-        0,
-        width,
-        height
-    );
+// =================================
+// HARTJES TEKENEN
+// =================================
 
-
-    // Sterren
-
-    animationCtx.fillStyle =
-        "white";
-
-
-    for (
-        let i = 0;
-        i < 100;
-        i++
-    ) {
-
-        const x =
-            (i * 83) % width;
-
-        const y =
-            (i * 47) % height;
-
-
-        const size =
-            1 +
-            ((i * 17) % 3);
-
-
-        animationCtx.beginPath();
-
-        animationCtx.arc(
-            x,
-            y,
-            size,
-            0,
-            Math.PI * 2
-        );
-
-        animationCtx.fill();
-
-    }
-
-}
-
-
-// ========================================
-// HARTJES
-// ========================================
-
-function drawAnimationHearts(time) {
-
-    const hearts = [
-
-        [80, 90, 20],
-        [620, 80, 24],
-        [100, 400, 18],
-        [600, 400, 22],
-        [350, 60, 17],
-        [350, 440, 18]
-
-    ];
-
-
-    for (
-        let i = 0;
-        i < hearts.length;
-        i++
-    ) {
-
-        const heart =
-            hearts[i];
-
-
-        const floating =
-            Math.sin(
-                time * 0.003 +
-                i
-            ) * 12;
-
-
-        drawHeart(
-            heart[0] + floating,
-            heart[1],
-            heart[2]
-        );
-
-    }
-
-
-    // Kleine hartjes rond de persoon
-
-    for (
-        let i = 0;
-        i < 8;
-        i++
-    ) {
-
-        const angle =
-            i *
-            Math.PI *
-            2 /
-            8;
-
-
-        const radius = 190;
-
-
-        const x =
-            350 +
-            Math.cos(angle) *
-            radius;
-
-
-        const y =
-            250 +
-            Math.sin(angle) *
-            radius;
-
-
-        drawHeart(
-            x,
-            y,
-            10
-        );
-
-    }
-
-}
-
-
-// ========================================
-// HART TEKENEN
-// ========================================
-
-function drawHeart(
-    x,
-    y,
-    size
-) {
+function drawBackgroundHeart(x, y, size, alpha) {
 
     animationCtx.save();
 
+    animationCtx.globalAlpha = alpha;
 
-    animationCtx.translate(
-        x,
-        y
-    );
-
+    animationCtx.fillStyle = "#ff4fa3";
 
     animationCtx.beginPath();
 
-
     animationCtx.moveTo(
-        0,
-        size * 0.35
+        x,
+        y + size * 0.3
     );
-
 
     animationCtx.bezierCurveTo(
-        -size * 1.1,
-        -size * 0.35,
-        -size * 0.55,
-        -size,
-        0,
-        -size * 0.35
+        x - size * 0.9,
+        y - size * 0.3,
+        x - size * 0.6,
+        y - size,
+        x,
+        y - size * 0.35
     );
-
 
     animationCtx.bezierCurveTo(
-        size * 0.55,
-        -size,
-        size * 1.1,
-        -size * 0.35,
-        0,
-        size * 0.35
+        x + size * 0.6,
+        y - size,
+        x + size * 0.9,
+        y - size * 0.3,
+        x,
+        y + size * 0.3
     );
-
-
-    animationCtx.closePath();
-
-
-    animationCtx.fillStyle =
-        "#ff4fa3";
-
-
-    animationCtx.shadowColor =
-        "#ff4fa3";
-
-
-    animationCtx.shadowBlur =
-        10;
-
 
     animationCtx.fill();
 
-
     animationCtx.restore();
-
 }
 
 
-// ========================================
-// ESC = ANIMATIE STOPPEN
-// ========================================
+// =================================
+// ACHTERGROND HARTJES
+// =================================
 
-document.addEventListener(
-    "keydown",
-    event => {
+for (let i = 0; i < 35; i++) {
 
-        if (
-            event.key === "Escape" &&
-            animationRunning
-        ) {
+    const x =
+        (i * 137) % 700;
 
-            animationRunning =
-                false;
+    const y =
+        (i * 83) % 500;
 
+    const size =
+        8 + ((i * 7) % 18);
 
-            if (
-                animationFrameId !== null
-            ) {
+    const alpha =
+        0.25 + ((i % 4) * 0.12);
 
-                cancelAnimationFrame(
-                    animationFrameId
-                );
-
-                animationFrameId =
-                    null;
-
-            }
-
-
-            if (music) {
-
-                music.pause();
-
-                music.currentTime =
-                    0;
-
-            }
-
-
-            if (
-                playAnimationButton
-            ) {
-
-                playAnimationButton.disabled =
-                    false;
-
-                playAnimationButton.textContent =
-                    "▶ Animatie opnieuw afspelen";
-
-            }
-
-        }
-
-    }
-);
+    drawBackgroundHeart(
+        x,
+        y,
+        size,
+        alpha
+    );
+}
