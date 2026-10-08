@@ -690,50 +690,64 @@ main {
    KLEURMODELLEN PAGINA
    ===================================================== */
 
-.kleurmodellen-container {
-    width: 85%;
-    max-width: 1000px;
-    margin: 150px auto 60px auto;
+/* PAGINA */
+
+.kleur-page {
+    width: 90%;
+    max-width: 950px;
+
+    margin: 0 auto;
+
+    padding-top: 120px;
+    padding-bottom: 70px;
+
     color: white;
 }
 
-.kleurmodellen-container h1 {
+
+/* TITEL */
+
+.kleur-page > h1 {
     text-align: center;
+
     font-size: 42px;
-    margin-bottom: 20px;
+
+    margin: 0 0 50px 0;
+
+    color: white;
+
     text-shadow:
         0 0 10px rgba(255, 255, 255, 0.7),
         0 0 25px rgba(150, 100, 255, 0.8);
 }
 
-.kleurmodellen-intro {
-    max-width: 750px;
-    margin: 0 auto 45px auto;
-    text-align: center;
-    font-size: 18px;
-    line-height: 1.7;
-}
-
 
 /* =====================================================
-   KLEURMODEL BLOKKEN
+   KLEUR BLOKKEN
    ===================================================== */
 
-.kleurmodel-card {
-    display: flex;
-    align-items: center;
-    gap: 35px;
+.kleur-box {
+    width: 100%;
 
-    margin: 30px 0;
+    min-height: 230px;
+
+    margin: 0 0 35px 0;
     padding: 30px;
 
-    background: rgba(20, 10, 45, 0.82);
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+    gap: 40px;
+
+    background: rgba(20, 10, 50, 0.85);
 
     border: 1px solid rgba(255, 255, 255, 0.15);
+
     border-radius: 20px;
 
     box-shadow:
-        0 0 20px rgba(100, 50, 180, 0.25);
+        0 0 20px rgba(100, 60, 200, 0.25);
 
     transition:
         transform 0.3s ease,
@@ -741,13 +755,13 @@ main {
 }
 
 
-/* Alleen het tekstblok beweegt bij hover */
+/* Alleen het tekstblok beweegt een beetje */
 
-.kleurmodel-card:hover {
-    transform: scale(1.02);
+.kleur-box:hover {
+    transform: translateY(-4px);
 
     box-shadow:
-        0 0 30px rgba(150, 100, 255, 0.45);
+        0 0 30px rgba(150, 100, 255, 0.4);
 }
 
 
@@ -755,22 +769,35 @@ main {
    KLEURVLAKKEN
    ===================================================== */
 
-.kleurvoorbeeld {
-    width: 180px;
-    height: 180px;
+.kleur-preview {
+    width: 230px;
+    height: 170px;
 
     flex-shrink: 0;
 
-    border-radius: 18px;
+    border-radius: 15px;
 
     box-shadow:
-        0 0 25px rgba(255, 255, 255, 0.15);
+        0 0 20px rgba(255, 255, 255, 0.12);
 }
 
 
-/* RGB voorbeeld */
+/* RGB */
 
-.rgb-voorbeeld {
+.rgb-preview {
+    background:
+        linear-gradient(
+            135deg,
+            red,
+            green,
+            blue
+        );
+}
+
+
+/* HEX */
+
+.hex-preview {
     background:
         linear-gradient(
             135deg,
@@ -781,16 +808,9 @@ main {
 }
 
 
-/* HEX voorbeeld */
+/* HSL */
 
-.hex-voorbeeld {
-    background: #8b5cf6;
-}
-
-
-/* HSL voorbeeld */
-
-.hsl-voorbeeld {
+.hsl-preview {
     background:
         linear-gradient(
             135deg,
@@ -801,83 +821,112 @@ main {
 }
 
 
-/* CMYK voorbeeld */
+/* CMYK */
 
-.cmyk-voorbeeld {
+.cmyk-preview {
     background:
         linear-gradient(
             135deg,
-            #00ffff,
-            #ff00ff,
-            #ffff00
+            cyan,
+            magenta,
+            yellow
         );
 }
 
 
 /* =====================================================
-   TEKST
+   TEKSTVAK
    ===================================================== */
 
-.kleurmodel-tekst {
+.kleur-info {
     flex: 1;
+
+    min-width: 0;
 }
 
-.kleurmodel-tekst h2 {
-    margin-top: 0;
-    margin-bottom: 15px;
+
+.kleur-info h2 {
+    margin: 0 0 15px 0;
 
     font-size: 30px;
+
+    color: white;
 
     text-shadow:
         0 0 10px rgba(255, 255, 255, 0.5);
 }
 
-.kleurmodel-tekst p {
+
+.kleur-info p {
+    margin: 8px 0;
+
     font-size: 16px;
-    line-height: 1.7;
-}
 
-.kleurcode {
-    display: inline-block;
+    line-height: 1.6;
 
-    margin-top: 10px;
-    padding: 8px 14px;
-
-    background: rgba(0, 0, 0, 0.35);
-
-    border-radius: 8px;
-
-    font-family: monospace;
-    color: #d9c7ff;
+    color: rgba(255, 255, 255, 0.9);
 }
 
 
 /* =====================================================
-   MOBIEL
+   MOBIEL / KLEIN SCHERM
    ===================================================== */
 
-@media (max-width: 700px) {
+@media (max-width: 750px) {
 
-    .kleurmodellen-container {
+    .kleur-page {
         width: 92%;
-        margin-top: 130px;
+
+        padding-top: 110px;
     }
 
-    .kleurmodellen-container h1 {
+
+    .kleur-box {
+        flex-direction: column;
+
+        text-align: center;
+
+        padding: 25px;
+    }
+
+
+    .kleur-preview {
+        width: 100%;
+        max-width: 300px;
+
+        height: 160px;
+    }
+
+
+    .kleur-info {
+        width: 100%;
+    }
+
+}
+
+
+/* =====================================================
+   HEEL KLEIN SCHERM
+   ===================================================== */
+
+@media (max-width: 450px) {
+
+    .kleur-page > h1 {
         font-size: 32px;
     }
 
-    .kleurmodel-card {
-        flex-direction: column;
-        text-align: center;
+
+    .kleur-box {
+        padding: 20px;
     }
 
-    .kleurvoorbeeld {
-        width: 140px;
+
+    .kleur-preview {
         height: 140px;
     }
 
-    .kleurmodel-tekst h2 {
+
+    .kleur-info h2 {
         font-size: 26px;
     }
 
