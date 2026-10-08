@@ -515,52 +515,6 @@ main {
 .binary-text .content-box {
     width: 100%;
 }
-
-
-/* Planeten */
-
-.binary-planets {
-    width: 100%;
-
-    max-width: 400px;
-
-    height: auto;
-
-    justify-self: center;
-
-    border: none;
-
-    filter:
-        drop-shadow(0 0 20px rgba(100, 100, 255, 0.25));
-
-    transition: transform 0.3s ease;
-}
-
-.binary-planets:hover {
-    transform: scale(1.03);
-}
-
-
-/* =========================================
-   ANIMATIE
-   ========================================= */
-
-@keyframes fadeIn {
-
-    from {
-        opacity: 0;
-
-        transform: translateY(15px);
-    }
-
-    to {
-        opacity: 1;
-
-        transform: translateY(0);
-    }
-}
-
-
 /* =========================================
    TABLET
    ========================================= */
@@ -680,10 +634,6 @@ main {
         max-width: 60%;
 
         margin: 25px auto 0;
-    }
-
-    .binary-planets {
-        width: 80%;
     }
 }
 /* =====================================================
