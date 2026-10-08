@@ -12,141 +12,137 @@
 
 <body>
 
-    <!-- NAVIGATIE -->
-    <header class="top-window">
+    <div class="background"></div>
 
-        <div class="site-title">
+
+    <!-- Navigatie -->
+    <header class="navbar">
+
+        <a href="index.html" class="logo">
             ✦ Welcome to my website ୭
-        </div>
+        </a>
 
-        <nav class="main-nav">
+        <nav class="nav-links">
             <a href="index.html">Home</a>
             <a href="pagina2.html">About me</a>
             <a href="informatie.html">Projects</a>
-            <a href="binairsstelsel.html">Binaire stelsel</a>
-            <a href="kleurmodellen.html" class="active">Kleurmodellen</a>
+            <a href="binairsstelsel.html" class="active">
+                Binaire stelsel
+            </a>
+            <a href="kleurmodellen.html">Kleurmodellen</a>
         </nav>
 
-        <div class="search-box">
-            <input type="text" placeholder="Search...">
-            <span>🔍</span>
+        <div class="search-container">
+
+            <input
+                type="search"
+                placeholder="Search..."
+                aria-label="Search"
+            >
+
+            <button type="button" aria-label="Search">
+                🔍
+            </button>
+
         </div>
 
     </header>
 
 
-    <!-- HOOFDINHOUD -->
-    <main class="kleurmodellen-page">
+    <!-- Hoofdcontent -->
+    <main>
 
-        <div class="kleurmodellen-container">
+        <section class="page-card kleurmodel">
 
-            <!-- KLEINE TITEL -->
-            <div class="kleurmodellen-label">
+            <span class="small-title">
                 ✦ COMPUTER SCIENCE ✦
-            </div>
+            </span>
 
+            <h1>
+                Het binaire stelsel
+            </h1>
 
-            <!-- HOOFDTITEL -->
-            <h1>Kleurmodellen</h1>
-
-
-            <!-- KORTE INLEIDING -->
-            <p class="kleurmodellen-intro">
-                <!-- Schrijf hier zelf je inleiding -->
+            <p>
+                Het binaire stelsel is een getallensysteem dat alleen
+                uit 0 en 1 bestaat.
             </p>
 
-
-            <!-- RGB -->
-            <section class="kleurmodel-block">
+            <div class="kleurmodel>
 
                 <div class="kleurmodel-text">
 
-                    <h2>RGB</h2>
+                    <div class="content-box">
 
-                    <p>
-                        <!-- Schrijf hier zelf je informatie -->
-                    </p>
+                        <h2>
+                            Hoe werkt het?
+                        </h2>
 
-                    <p>
-                        <!-- Schrijf hier zelf meer informatie -->
-                    </p>
+                        <p>
+                            Computers gebruiken het binaire stelsel
+                            omdat elektronische onderdelen gemakkelijk
+                            twee toestanden kunnen herkennen:
+                            aan en uit.
+                        </p>
 
-                </div>
+                        <p>
+                            Alle informatie in een computer, zoals tekst,
+                            afbeeldingen, geluid en programma's, wordt
+                            uiteindelijk omgezet in nullen en enen.
+                        </p>
 
-                <div class="kleurmodel-preview rgb-preview"></div>
-
-            </section>
-
-
-            <!-- HEX -->
-            <section class="kleurmodel-block">
-
-                <div class="kleurmodel-text">
-
-                    <h2>HEX</h2>
-
-                    <p>
-                        <!-- Schrijf hier zelf je informatie -->
-                    </p>
-
-                    <p>
-                        <!-- Schrijf hier zelf meer informatie -->
-                    </p>
-
-                </div>
-
-                <div class="kleurmodel-preview hex-preview"></div>
-
-            </section>
+                    </div>
 
 
-            <!-- HSL -->
-            <section class="kleurmodel-block">
+                    <div class="content-box">
 
-                <div class="kleurmodel-text">
+                        <h2>
+                            ✦ Posities
+                        </h2>
 
-                    <h2>HSL</h2>
+                        <p>
+                            Elke positie in een binair getal heeft een
+                            waarde die een macht van 2 is.
+                        </p>
 
-                    <p>
-                        <!-- Schrijf hier zelf je informatie -->
-                    </p>
+                        <p>
+                            Een 0 betekent dat een waarde niet wordt
+                            gebruikt en een 1 betekent dat deze waarde
+                            wel wordt gebruikt.
+                        </p>
 
-                    <p>
-                        <!-- Schrijf hier zelf meer informatie -->
-                    </p>
-
-                </div>
-
-                <div class="kleurmodel-preview hsl-preview"></div>
-
-            </section>
+                    </div>
 
 
-            <!-- CMYK -->
-            <section class="kleurmodel-block">
+                    <div class="kleurmodel-block">
 
-                <div class="kleurmodel-text">
+                        <h2>
+                            ✦ Voorbeeld
+                        </h2>
 
-                    <h2>CMYK</h2>
+                        <p>
+                            kleurmodel <strong>1011</strong>
+                            bestaat uit de waarden 8, 4, 2 en 1.
+                        </p>
 
-                    <p>
-                        <!-- Schrijf hier zelf je informatie -->
-                    </p>
+                        <p>
+                            info
+                        </p>
 
-                    <p>
-                        <!-- Schrijf hier zelf meer informatie -->
-                    </p>
+                        <p>
+                            <strong>voorbeeld</strong>
+                        </p>
+
+                    </div>
 
                 </div>
 
-                <div class="kleurmodel-preview cmyk-preview"></div>
 
-            </section>
+               
+            </div>
 
-        </div>
+        </section>
 
     </main>
 
 </body>
-
 </html>
