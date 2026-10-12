@@ -493,27 +493,29 @@ main {
    ========================================= */
 
 .binary-layout {
-    display: grid;
-
-    grid-template-columns: 1fr 350px;
-
-    gap: 30px;
-
+    display: flex;
+    flex-direction: column;
     align-items: center;
 
+    gap: 25px;
     margin-top: 30px;
 }
 
 .binary-text {
     display: flex;
-
     flex-direction: column;
-
     gap: 20px;
+
+    width: 100%;
+    max-width: 600px;
+
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .binary-text .content-box {
     width: 100%;
+    text-align: center;
 }
 /* =========================================
    TABLET
